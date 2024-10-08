@@ -1,8 +1,10 @@
 # UET-Crypto-Tool
 ## Setup
-run command below to install dependencices
+Make sure you have [poetry](https://python-poetry.org/docs/) installed. Then run the following command to setup project.
 ```sh
-poetry install
+git clone https://github.com/uet-crypto-tool/backend &&
+cd backend &&
+poetry install &&
 ```
 ## Run
 ```sh

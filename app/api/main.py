@@ -11,4 +11,4 @@ api_router.include_router(
 api_router.include_router(
     rsa.router, prefix="/cryptoSystem/modern/rsa", tags=["Modern CryptoSystem"])
 api_router.include_router(
-    ellipticCurve.router, prefix="/ellipticCurve/getPoints", tags=["Elliptic Curve"])
+    ellipticCurve.router, prefix="/cryptosys/ecc", tags=["Elliptic Curve"])

@@ -1,10 +1,12 @@
 from fastapi import FastAPI
-from app.api.main import api_router
+from app.api.main import router
 import uvicorn
 
-app = FastAPI()
-app.include_router(api_router)
-
+app = FastAPI(
+    title="Uet CryptoTool",
+    summary="CryptoTool",
+)
+app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(

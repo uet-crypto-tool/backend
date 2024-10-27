@@ -1,14 +1,36 @@
 from fastapi import APIRouter
+from app.api.routes import ellipticCurve, prime
+from app.api.routes.cryptoSystem.main import router as cryptoSytemRouter
+from app.api.routes.signatureScheme.main import router as signatureSchemeRouter
 
-from app.api.routes.cryptoSystem.classic import shift
-from app.api.routes.cryptoSystem.modern import rsa
-from app.api.routes.ellipticCurve import ellipticCurve
+router = APIRouter()
 
-api_router = APIRouter()
 
-api_router.include_router(
-    shift.router, prefix="/cryptoSystem/classic/shift", tags=["Classic CryptoSystem"])
-api_router.include_router(
-    rsa.router, prefix="/cryptoSystem/modern/rsa", tags=["Modern CryptoSystem"])
-api_router.include_router(
-    ellipticCurve.router, prefix="/ellipticCurve/getPoints", tags=["Elliptic Curve"])
+@router.get("/api/healthchecker", tags=["Health"])
+def healthChecker():
+    return {"message": "The API is LIVE!!"}
+
+
+router.include_router(
+    prime.router,
+    prefix="/prime",
+    tags=["Prime"],
+)
+
+router.include_router(
+    cryptoSytemRouter,
+    prefix="/crypto_system",
+    tags=["Crypto System"],
+)
+
+router.include_router(
+    signatureSchemeRouter,
+    prefix="/signature_scheme",
+    tags=["Signature Scheme"],
+)
+
+router.include_router(
+    ellipticCurve.router,
+    prefix="/elliptice_curve",
+    tags=["Elliptic Curve"],
+)

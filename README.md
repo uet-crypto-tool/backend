@@ -9,4 +9,8 @@ pip install -r requirements.txt &&
 ```sh
 python -m app.main
 ```
+## Test
+```
+pytest .
+```
 

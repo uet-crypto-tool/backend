@@ -1,44 +1,58 @@
 import secrets
 from typing import Tuple
-from app.core.ellipticCurve.ellipticCurve import Curve, Point
+from app.core.ellipticCurve.curve import Curve
+from app.core.ellipticCurve.point import Point, PointType
+from app.core.ellipticCurve.domain import CurveDomainParamter
 from pydantic import BaseModel
 
 
 class Seed(BaseModel):
-    pass
-    # curve: Curve
-    # P: Point
+    curve_domain_name: str
 
 
 class PrivateKey(BaseModel):
+    curve_domain_name: str
     s: int
 
 
 class PublicKey(BaseModel):
-    pass
-    # E: Curve
-    # P: Point
-    # B: Point
+    curve_domain_name: str
+    B: PointType
 
 
-def generateKeyOnDefinedCurve(curve_name: str):
-    pass
+def generateKeyOnDomain(curve_domain_name: str):
+    return generateKey(CurveDomainParamter.create(curve_domain_name))
 
 
-def generateKey(self, curve: Curve, P: Point) -> Tuple[PrivateKey, PublicKey]:
+def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
     E = curve
-    P = P
-    s = secrets.randbits(2048)
-    B = P * s
-    return (PrivateKey(s=s), PublicKey(E=E, P=P, B=B))
+    P = E.g
+    s = secrets.randbits(1024)
+    B = s * P
+    return (
+        PrivateKey(curve_domain_name=curve.name, s=s),
+        PublicKey(curve_domain_name=curve.name, B=PointType(x=B.x, y=B.y))
+    )
 
 
-def encrypt(publicKey: PublicKey, M: Point) -> Tuple[Point, Point]:
-    k = secrets.randbits(2048)
-    M1 = k * publicKey.P
-    M2 = M + publicKey.B * k
-    return (M1, M2)
+def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
+    E = CurveDomainParamter.create(publicKey.curve_domain_name)
+    P = E.g
+
+    B = publicKey.B
+    B = Point(E, B.x, B.y)
+    M = Point(E, M.x, M.y)
+
+    k = secrets.randbits(8)
+    M1 = k * P
+    M2 = M + B * k
+    return (M1.type(), M2.type())
 
 
-def decrypt(privateKey: PrivateKey, M1: Point, M2: Point) -> Point:
-    return M2 - M1 * privateKey.s
+def decrypt(privateKey: PrivateKey, encrypted_message: Tuple[PointType, PointType]) -> PointType:
+    E = CurveDomainParamter.create(privateKey.curve_domain_name)
+    M1, M2 = encrypted_message
+    M1 = Point(E, M1.x, M1.y)
+    M2 = Point(E, M2.x, M2.y)
+    R = M2 - M1 * privateKey.s
+    return R.type()

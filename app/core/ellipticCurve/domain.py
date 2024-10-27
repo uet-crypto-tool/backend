@@ -1,4 +1,4 @@
-from app.core.ellipticCurve.ellipticCurve import Curve, SubGroup
+from app.core.ellipticCurve.curve import Curve, SubGroup
 from enum import Enum
 
 

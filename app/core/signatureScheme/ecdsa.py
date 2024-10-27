@@ -1,48 +1,51 @@
 import secrets
-from app.core.ellipticCurve.ellipticCurve import Curve, Point
+from app.core.ellipticCurve.domain import CurveDomainParamter
+from app.core.ellipticCurve.point import Point, PointType
 from app.core.utils import inverse_mod
 from typing import Tuple
+from pydantic import BaseModel
 
 
-class Seed:
-    E: Curve
-    G: Point
+class Seed(BaseModel):
+    curve_domain_name: str
 
 
-class PublicKey:
-    E: Curve
-    G: Point
-    Q: Point
+class PublicKey(BaseModel):
+    curve_domain_name: str
+    Q: PointType
 
 
-class PrivateKey:
-    E: Curve
-    G: Point
+class PrivateKey(BaseModel):
+    curve_domain_name: str
     d: int
 
 
-def generateKey(seed: Seed):
-    E = seed.E
+def generateKey(curve_domain_name: str):
+    E = CurveDomainParamter.create(curve_domain_name)
     n = E.field.n
-    G = seed.G
+    G = E.g
     d = 1 + secrets.randbelow(n - 1)
     Q = G * d
-    return (PrivateKey(E=E, G=G, d=d), PublicKey(E=E, G=G, Q=Q))
+    return (PrivateKey(curve_domain_name=curve_domain_name, d=d),
+            PublicKey(curve_domain_name=curve_domain_name, Q=Q.type()))
 
 
-def H(self, x: int) -> int:
+def H(x: int) -> int:
     return x
 
 
 def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
-    n = privateKey.E.field.n
+    E = CurveDomainParamter.create(privateKey.curve_domain_name)
+    G = E.g
+
+    n = E.field.n
     r = 0
     s = 0
     while s == 0:
         k = 1
         while r == 0:
             k = 1 + secrets.randbelow(n - 1)
-            x = (privateKey.G * k).x
+            x = (G * k).x
             r = x % (n)
 
         h = H(message)
@@ -54,13 +57,18 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
     return (r, s)
 
 
-def verify(self, publicKey: PublicKey, message: int, r: int, s: int) -> bool:
-    n = publicKey.E.field.n
+def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
+    E = CurveDomainParamter.create(publicKey.curve_domain_name)
+    G = E.g
+    Q = Point(E, publicKey.Q.x, publicKey.Q.y)
+    r, s = signature
+
+    n = E.field.n
     w = inverse_mod(s, n)
     h = H(message)
     u1 = (h * w) % (n)
     u2 = (r * w) % (n)
-    x = (publicKey.G * u1 + publicKey.Q * u2).x
+    x = (G * u1 + Q * u2).x
     v = x % (n)
 
     return v == r

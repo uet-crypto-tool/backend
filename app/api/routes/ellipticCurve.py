@@ -1,15 +1,15 @@
-from app.core.ellipticCurve import ellipticCurve, registry
+from app.core.ellipticCurve import ellipticCurve, domain
 from pydantic import BaseModel
 from fastapi import APIRouter
 
 router = APIRouter()
 
 
-@router.get("/registries")
-async def elliptic_curve_registries():
-    return registry.EC_CURVE_REGISTRY
+@router.get("/domains")
+async def elliptic_curve_domain_params():
+    return domain.CurveDomainParamter.list()
 
 
-@router.get("/registrie/{name}")
-async def elliptic_curve_registries(name: str):
-    return registry.EC_CURVE_REGISTRY[name]
+@router.get("/domains/{name}")
+async def elliptice_curve_domain_param(name: str):
+    return domain.CurveDomainParamter[name]

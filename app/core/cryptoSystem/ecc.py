@@ -21,6 +21,10 @@ class PublicKey(BaseModel):
     # B: Point
 
 
+def generateKeyOnDefinedCurve(curve_name: str):
+    pass
+
+
 def generateKey(self, curve: Curve, P: Point) -> Tuple[PrivateKey, PublicKey]:
     E = curve
     P = P

@@ -6,8 +6,8 @@ router = APIRouter()
 
 
 @router.post("/ecc/generate_key")
-async def ecc_generate_key(seed: ecc.Seed):
-    private_key, public_key = ecc.generateKey(seed)
+async def ecc_generate_key(curve_name: str):
+    private_key, public_key = ecc.generateKey(curve_name)
     return {
         "privateKey": private_key,
         "publicKey": public_key

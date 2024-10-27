@@ -1,7 +1,8 @@
 from fastapi import APIRouter
-from app.api.routes import ellipticCurve, prime
+from app.api.routes import prime
 from app.api.routes.cryptoSystem.main import router as cryptoSytemRouter
 from app.api.routes.signatureScheme.main import router as signatureSchemeRouter
+from app.api.routes.ellipticeCurve.main import router as ellipticCurveRouter
 
 router = APIRouter()
 
@@ -30,7 +31,7 @@ router.include_router(
 )
 
 router.include_router(
-    ellipticCurve.router,
+    ellipticCurveRouter,
     prefix="/elliptice_curve",
     tags=["Elliptic Curve"],
 )

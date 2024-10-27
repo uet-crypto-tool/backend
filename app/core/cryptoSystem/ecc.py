@@ -1,7 +1,7 @@
 import secrets
 from typing import Tuple
-from app.core.ellipticCurve.curve import Curve
 from app.core.ellipticCurve.point import Point, PointType
+from app.core.ellipticCurve.curve import Curve
 from app.core.ellipticCurve.domain import CurveDomainParamter
 from pydantic import BaseModel
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from app.core.ellipticCurve.point import Point
+import app.core.ellipticCurve.point as point
 
 
 class Curve(object):
@@ -8,7 +8,7 @@ class Curve(object):
         self.a = a
         self.b = b
         self.field = field
-        self.g = Point(self, self.field.g[0], self.field.g[1])
+        self.g = point.Point(self, self.field.g[0], self.field.g[1])
 
     def is_singular(self) -> bool:
         return (4 * self.a**3 + 27 * self.b**2) % self.field.p == 0
@@ -21,7 +21,7 @@ class Curve(object):
             return False
         return self.a == other.a and self.b == other.b and self.field == other.field
 
-    def __ne__(self, other) -> Point:
+    def __ne__(self, other) -> point.Point:
         return not self.__eq__(other)
 
     def __str__(self) -> str:
@@ -37,7 +37,7 @@ class Curve(object):
 
 
 class SubGroup(object):
-    def __init__(self, p: int, g: Point, n: int, h: int):
+    def __init__(self, p: int, g: point.Point, n: int, h: int):
         self.p = p
         self.g = g
         self.n = n

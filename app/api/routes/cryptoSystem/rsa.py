@@ -5,7 +5,31 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
-@router.post("/rsa/generate_key")
+class GenerateKeyResponse(BaseModel):
+    privateKey: rsa.PrivateKey
+    publicKey: rsa.PublicKey
+
+
+class EncryptRequest(BaseModel):
+    publicKey: rsa.PublicKey
+    message: int
+
+
+class EncryptResponse(BaseModel):
+    encrypted_message: int
+
+
+class DecryptRequest(BaseModel):
+    privateKey: rsa.PrivateKey
+    encrypted_message: int
+
+
+class DecryptResponse(BaseModel):
+    decrypted_message: int
+
+
+@router.post("/rsa/generate_key",
+             response_model=GenerateKeyResponse)
 async def rsa_generate_key(seed: rsa.Seed):
     private_key, public_key = rsa.generateKey(seed)
     return {
@@ -14,21 +38,11 @@ async def rsa_generate_key(seed: rsa.Seed):
     }
 
 
-class RSA_EncryptRequest(BaseModel):
-    publicKey: rsa.PublicKey
-    message: int
+@router.post("/rsa/encrypt", response_model=EncryptResponse)
+async def rsa_encrypt(req: EncryptRequest):
+    return EncryptResponse(encrypted_message=rsa.encrypt(req.publicKey, req.message))
 
 
-@router.post("/rsa/encrypt")
-async def rsa_encrypt(req: RSA_EncryptRequest):
-    return rsa.encrypt(req.publicKey, req.message)
-
-
-class RSA_DecryptRequest(BaseModel):
-    privateKey: rsa.PrivateKey
-    encrypted_message: int
-
-
-@router.post("/rsa/decrypt")
-async def rsa_decrypt(req: RSA_DecryptRequest):
-    return rsa.decrypt(req.privateKey, req.encrypted_message)
+@router.post("/rsa/decrypt", response_model=DecryptResponse)
+async def rsa_decrypt(req: DecryptRequest):
+    return DecryptResponse(decrypted_message=rsa.decrypt(req.privateKey, req.encrypted_message))

@@ -26,16 +26,18 @@ def test_pipeline(test_client: TestClient):
         }
     )
     assert response.status_code == 200
-    M1, M2 = response.json()
+    res = response.json()
 
     response = test_client.post(
         "/crypto_system/ecc/decrypt", json={
             "privateKey": key["privateKey"],
-            "M1": M1,
-            "M2": M2,
+            "M1": res["M1"],
+            "M2": res["M2"],
         }
     )
     assert response.status_code == 200
-    decrypted_message = response.json()
-    assert decrypted_message["x"] == message_point[0]
-    assert decrypted_message["y"] == message_point[1]
+
+    res = response.json()
+    decrypted_point = res["M"]
+    assert decrypted_point["x"] == message_point[0]
+    assert decrypted_point["y"] == message_point[1]

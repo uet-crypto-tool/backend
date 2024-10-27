@@ -12,7 +12,7 @@ class Seed(BaseModel):
 
 class PrivateKey(BaseModel):
     curve_domain_name: str
-    s: int
+    secret_number: int
 
 
 class PublicKey(BaseModel):
@@ -27,15 +27,17 @@ def generateKeyOnDomain(curve_domain_name: str):
 def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
     E = curve
     P = E.g
-    s = secrets.randbits(1024)
-    B = s * P
+    secret_number = secrets.randbits(1024)
+    B = secret_number * P
     return (
-        PrivateKey(curve_domain_name=curve.name, s=s),
+        PrivateKey(curve_domain_name=curve.name, secret_number=secret_number),
         PublicKey(curve_domain_name=curve.name, B=PointType(x=B.x, y=B.y))
     )
 
 
-def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
+def encrypt(publicKey: PublicKey,
+            M: PointType) -> Tuple[PointType, PointType]:
+    # TODO: embedding plaintext on curve
     E = CurveDomainParamter.create(publicKey.curve_domain_name)
     P = E.g
 
@@ -49,10 +51,11 @@ def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
     return (M1.type(), M2.type())
 
 
-def decrypt(privateKey: PrivateKey, encrypted_message: Tuple[PointType, PointType]) -> PointType:
+def decrypt(privateKey: PrivateKey,
+            encrypted_message: Tuple[PointType, PointType]) -> PointType:
     E = CurveDomainParamter.create(privateKey.curve_domain_name)
     M1, M2 = encrypted_message
     M1 = Point(E, M1.x, M1.y)
     M2 = Point(E, M2.x, M2.y)
-    R = M2 - M1 * privateKey.s
-    return R.type()
+    M = M2 - M1 * privateKey.secret_number
+    return M.type()

@@ -6,9 +6,19 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
+class GenerateKeyResponse(BaseModel):
+    privateKey: ecc.PrivateKey
+    publicKey: ecc.PublicKey
+
+
 class EncryptRequest(BaseModel):
     publicKey: ecc.PublicKey
     message: PointType
+
+
+class EncryptResponse(BaseModel):
+    M1: PointType
+    M2: PointType
 
 
 class DecryptRequest(BaseModel):
@@ -17,7 +27,11 @@ class DecryptRequest(BaseModel):
     M2: PointType
 
 
-@router.post("/ecc/generate_key")
+class DecryptResponse(BaseModel):
+    M: PointType
+
+
+@router.post("/ecc/generate_key", response_model=GenerateKeyResponse)
 async def ecc_generate_key(seed: ecc.Seed):
     private_key, public_key = ecc.generateKeyOnDomain(seed.curve_domain_name)
     return {
@@ -26,15 +40,16 @@ async def ecc_generate_key(seed: ecc.Seed):
     }
 
 
-@router.post("/ecc/encrypt")
+@router.post("/ecc/encrypt", response_model=EncryptResponse)
 async def ecc_encrypt(req: EncryptRequest):
-    return ecc.encrypt(req.publicKey, req.message)
+    M1, M2 = ecc.encrypt(req.publicKey, req.message)
+    return EncryptResponse(M1=M1, M2=M2)
 
 
-@router.post("/ecc/decrypt")
+@router.post("/ecc/decrypt", response_model=DecryptResponse)
 async def ecc_decrypt(req: DecryptRequest):
     M1 = PointType(x=req.M1.x,
                    y=req.M1.y)
     M2 = PointType(x=req.M2.x,
                    y=req.M2.y)
-    return ecc.decrypt(req.privateKey, (M1, M2))
+    return DecryptResponse(M=ecc.decrypt(req.privateKey, (M1, M2)))

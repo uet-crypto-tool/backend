@@ -7,8 +7,8 @@ router = APIRouter()
 
 
 @router.get("/api/healthchecker", tags=["Health"])
-def healthChecker():
-    return {"message": "The API is LIVE!!"}
+def health_checker():
+    return {"connected": True}
 
 
 router.include_router(

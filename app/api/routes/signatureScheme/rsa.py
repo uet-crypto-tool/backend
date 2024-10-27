@@ -5,8 +5,33 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
-@router.post("/rsa/generate_key")
-async def rsa_generateKey(seed: rsa.Seed):
+class GenerateKeyResponse(BaseModel):
+    privateKey: rsa.PrivateKey
+    publicKey: rsa.PublicKey
+
+
+class SignRequest(BaseModel):
+    privateKey: rsa.PrivateKey
+    message: int
+
+
+class SignRespone(BaseModel):
+    signature: int
+
+
+class VerifyRequest(BaseModel):
+    publicKey: rsa.PublicKey
+    message: int
+    signature: int
+
+
+class VerifyResponse(BaseModel):
+    is_valid: bool
+
+
+@router.post("/rsa/generate_key",
+             response_model=GenerateKeyResponse)
+async def rsa_generate_key(seed: rsa.Seed):
     private_key, public_key = rsa.generateKey(seed)
     return {
         "privateKey": private_key,
@@ -14,22 +39,13 @@ async def rsa_generateKey(seed: rsa.Seed):
     }
 
 
-class RsaSignRequest(BaseModel):
-    privateKey: rsa.PrivateKey
-    message: int
+@router.post("/rsa/sign", response_model=SignRespone)
+async def rsa_sign(req: SignRequest):
+    return SignRespone(signature=rsa.sign(req.privateKey, req.message))
 
 
-@router.post("/rsa/sign")
-async def rsa_sign(req: RsaSignRequest):
-    return rsa.sign(req.privateKey, req.message)
-
-
-class RsaVerifyRequest(BaseModel):
-    publicKey: rsa.PublicKey
-    message: int
-    signature: int
-
-
-@router.post("/rsa/verify")
-async def rsa_verify(req: RsaVerifyRequest):
-    return rsa.verify(req.publicKey, req.message, req.signature)
+@router.post("/rsa/verify", response_model=VerifyResponse)
+async def rsa_verify(req: VerifyRequest):
+    return VerifyResponse(
+        is_valid=rsa.verify(req.publicKey, req.message, req.signature)
+    )

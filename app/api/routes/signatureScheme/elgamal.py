@@ -6,7 +6,32 @@ from typing import Tuple
 router = APIRouter()
 
 
-@router.post("/elgamal/generate_key")
+class GenerateKeyResponse(BaseModel):
+    privateKey: elgamal.PrivateKey
+    publicKey: elgamal.PublicKey
+
+
+class SignRequest(BaseModel):
+    privateKey: elgamal.PrivateKey
+    message: int
+
+
+class SignResponse(BaseModel):
+    signature: Tuple[int, int]
+
+
+class VerifyRequest(BaseModel):
+    publicKey: elgamal.PublicKey
+    message: int
+    signature: Tuple[int, int]
+
+
+class VerifyResponse(BaseModel):
+    is_valid: bool
+
+
+@router.post("/elgamal/generate_key",
+             response_model=GenerateKeyResponse)
 async def elgamal_generateKey(seed: elgamal.Seed):
     privateKey, publicKey = elgamal.generateKey(seed)
     return {
@@ -15,22 +40,15 @@ async def elgamal_generateKey(seed: elgamal.Seed):
     }
 
 
-class ElgamalSignRequest(BaseModel):
-    privateKey: elgamal.PrivateKey
-    message: int
+@router.post("/elgamal/sign", response_model=SignResponse)
+async def elgamal_sign(req: SignRequest):
+    return SignResponse(
+        signature=elgamal.sign(req.privateKey, req.message)
+    )
 
 
-@router.post("/elgamal/sign")
-async def elgamal_sign(req: ElgamalSignRequest):
-    return elgamal.sign(req.privateKey, req.message)
-
-
-class ElgamalVerifyRequest(BaseModel):
-    publicKey: elgamal.PublicKey
-    message: int
-    signature: Tuple[int, int]
-
-
-@router.post("/elgamal/verify")
-async def elgamal_verify(req: ElgamalVerifyRequest):
-    return elgamal.verify(req.publicKey, req.message, req.signature)
+@router.post("/elgamal/verify", response_model=VerifyResponse)
+async def elgamal_verify(req: VerifyRequest):
+    return VerifyResponse(
+        is_valid=elgamal.verify(req.publicKey, req.message, req.signature)
+    )

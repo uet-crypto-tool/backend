@@ -6,19 +6,19 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
-class checkPrimeRequest(BaseModel):
+class CheckPrimeRequest(BaseModel):
     number: int
 
 
-@router.post("/check")
-async def isPrime(req: checkPrimeRequest):
-    return {"isPrime": primality.isPrime(req.number)}
-
-
-class generatePrimeRequest(BaseModel):
+class GeneratePrimeRequest(BaseModel):
     bitLength: int
 
 
+@router.post("/check")
+async def check_prime(req: CheckPrimeRequest):
+    return {"isPrime": primality.isPrime(req.number)}
+
+
 @router.post("/generate")
-async def generatePrime(req: generatePrimeRequest):
+async def generate_prime_has_bit_length(req: GeneratePrimeRequest):
     return generators.generateProbablePrime(req.bitLength)

@@ -22,12 +22,14 @@ def test_pipeline(test_client: TestClient):
             "publicKey": key["publicKey"],
             "message": message})
     assert response.status_code == 200
-    encrypted_message = response.json()
+    res = response.json()
+    encrypted_message = res["encrypted_message"]
 
     response = test_client.post(
         "/crypto_system/rsa/decrypt", json={
             "privateKey": key["privateKey"],
             "encrypted_message": encrypted_message})
     assert response.status_code == 200
-    decrypted_message = response.json()
+    res = response.json()
+    decrypted_message = res["decrypted_message"]
     assert decrypted_message == message

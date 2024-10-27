@@ -6,18 +6,32 @@ from typing import Tuple
 router = APIRouter()
 
 
-class EcdsaSignRequest(BaseModel):
+class GenerateKeyResponse(BaseModel):
+    privateKey: ecdsa.PrivateKey
+    publicKey: ecdsa.PublicKey
+
+
+class SignRequest(BaseModel):
     privateKey: ecdsa.PrivateKey
     message: int
 
 
-class EcdsaVerifyRequest(BaseModel):
+class SignResponse(BaseModel):
+    signature: Tuple[int, int]
+
+
+class VerifyRequest(BaseModel):
     publicKey: ecdsa.PublicKey
     message: int
     signature: Tuple[int, int]
 
 
-@router.post("/ecdsa/generate_key")
+class VerifyResponse(BaseModel):
+    is_valid: bool
+
+
+@router.post("/ecdsa/generate_key",
+             response_model=GenerateKeyResponse)
 async def ecdsa_generateKey(seed: ecdsa.Seed):
     privateKey, publicKey = ecdsa.generateKey(seed.curve_domain_name)
     return {
@@ -26,11 +40,15 @@ async def ecdsa_generateKey(seed: ecdsa.Seed):
     }
 
 
-@router.post("/ecdsa/sign")
-async def ecdsa_sign(req: EcdsaSignRequest):
-    return ecdsa.sign(req.privateKey, req.message)
+@router.post("/ecdsa/sign", response_model=SignResponse)
+async def ecdsa_sign(req: SignRequest):
+    return SignResponse(
+        signature=ecdsa.sign(req.privateKey, req.message)
+    )
 
 
-@router.post("/ecdsa/verify")
-async def ecdsa_verify(req: EcdsaVerifyRequest):
-    return ecdsa.verify(req.publicKey, req.message, req.signature)
+@router.post("/ecdsa/verify", response_model=VerifyResponse)
+async def ecdsa_verify(req: VerifyRequest):
+    return VerifyResponse(
+        is_valid=ecdsa.verify(req.publicKey, req.message, req.signature)
+    )

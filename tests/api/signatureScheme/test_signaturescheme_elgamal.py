@@ -19,7 +19,8 @@ def test_pipeline(test_client: TestClient):
             "privateKey": key["privateKey"],
             "message": message})
     assert response.status_code == 200
-    signature = response.json()
+    res = response.json()
+    signature = res["signature"]
 
     response = test_client.post(
         "/signature_scheme/elgamal/verify", json={
@@ -27,4 +28,6 @@ def test_pipeline(test_client: TestClient):
             "message": message,
             "signature": signature})
     assert response.status_code == 200
-    assert response.json() == True
+    res = response.json()
+    is_valid = res["is_valid"]
+    assert is_valid == True

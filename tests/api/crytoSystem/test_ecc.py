@@ -13,15 +13,15 @@ def test_pipeline(test_client: TestClient):
     assert response.status_code == 200
     key = response.json()
 
-    curve_params = CurveDomainParamter[curve_domain_name].value
+    curve = CurveDomainParamter.get(curve_domain_name)
 
-    message_point = curve_params["g"]
+    message_point = curve.g
     response = test_client.post(
         "/crypto_system/ecc/encrypt", json={
             "publicKey": key["publicKey"],
             "message": {
-                "x": message_point[0],
-                "y": message_point[1],
+                "x": message_point.x,
+                "y": message_point.y,
             }
         }
     )
@@ -39,5 +39,5 @@ def test_pipeline(test_client: TestClient):
 
     res = response.json()
     decrypted_point = res["M"]
-    assert decrypted_point["x"] == message_point[0]
-    assert decrypted_point["y"] == message_point[1]
+    assert decrypted_point["x"] == message_point.x
+    assert decrypted_point["y"] == message_point.y

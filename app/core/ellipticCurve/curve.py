@@ -25,7 +25,6 @@ class Curve(object):
         return self.p == other.p \
             and self.a == other.a\
             and self.b == other.b\
-            and self.g == other.g\
             and self.n == other.n\
             and self.h == other.h
 

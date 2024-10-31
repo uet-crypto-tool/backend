@@ -1,19 +1,12 @@
 import secrets
 from app.core.utils import inverse_mod, powermod, gcd
-from app.core.primality import isPrime
 from typing import Tuple
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 
 
 class Seed(BaseModel):
     p: int
     a: int
-
-    @field_validator('p')
-    def check_prime(cls, value):
-        if not isPrime(value):
-            raise ValueError(f"{value} is not a prime number")
-        return value
 
 
 class PublicKey(BaseModel):
@@ -21,23 +14,11 @@ class PublicKey(BaseModel):
     alpha: int
     beta: int
 
-    @field_validator('p')
-    def check_prime(cls, value):
-        if not isPrime(value):
-            raise ValueError(f"{value} is not a prime number")
-        return value
-
 
 class PrivateKey(BaseModel):
     p: int
     a: int
     alpha: int
-
-    @field_validator('p')
-    def check_prime(cls, value):
-        if not isPrime(value):
-            raise ValueError(f"{value} is not a prime number")
-        return value
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:

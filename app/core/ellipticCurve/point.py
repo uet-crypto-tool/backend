@@ -21,7 +21,7 @@ class Point(object):
         self.curve = curve
         self.x = x
         self.y = y
-        self.p = self.curve.field.p
+        self.p = self.curve.p
         self.on_curve = True
         if not self.curve.on_curve(self.x, self.y):
             warnings.warn(
@@ -79,7 +79,7 @@ class Point(object):
         if isinstance(other, Inf):
             return Inf(self.curve)
         if isinstance(other, int) or isinstance(other, LONG_TYPE):
-            if other % self.curve.field.n == 0:
+            if other % self.curve.n == 0:
                 return Inf(self.curve)
             if other < 0:
                 addend = Point(self.curve, self.x, -self.y % self.p)

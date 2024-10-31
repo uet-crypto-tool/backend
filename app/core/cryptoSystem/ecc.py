@@ -21,7 +21,7 @@ class PublicKey(BaseModel):
 
 
 def generateKeyOnDomain(curve_domain_name: str):
-    return generateKey(CurveDomainParamter.create(curve_domain_name))
+    return generateKey(CurveDomainParamter.get(curve_domain_name))
 
 
 def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
@@ -38,7 +38,7 @@ def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
 def encrypt(publicKey: PublicKey,
             M: PointType) -> Tuple[PointType, PointType]:
     # TODO: embedding plaintext on curve
-    E = CurveDomainParamter.create(publicKey.curve_domain_name)
+    E = CurveDomainParamter.get(publicKey.curve_domain_name)
     P = E.g
 
     B = publicKey.B
@@ -53,7 +53,7 @@ def encrypt(publicKey: PublicKey,
 
 def decrypt(privateKey: PrivateKey,
             encrypted_message: Tuple[PointType, PointType]) -> PointType:
-    E = CurveDomainParamter.create(privateKey.curve_domain_name)
+    E = CurveDomainParamter.get(privateKey.curve_domain_name)
     M1, M2 = encrypted_message
     M1 = Point(E, M1.x, M1.y)
     M2 = Point(E, M2.x, M2.y)

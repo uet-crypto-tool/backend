@@ -1,23 +1,42 @@
 import secrets
 from app.core.utils import inverse_mod, powermod, gcd
 from typing import Tuple
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
+from app.core.primality import isPrime
 
 
 class Seed(BaseModel):
     p: int
     a: int
 
+    @validator('p')
+    def check_prime(cls, value):
+        if not isPrime(value):
+            raise ValueError(f"{value} is not a prime number")
+        return value
+
 
 class PrivateKey(BaseModel):
     p: int
     a: int
+
+    @validator('p')
+    def check_prime(cls, value):
+        if not isPrime(value):
+            raise ValueError(f"{value} is not a prime number")
+        return value
 
 
 class PublicKey(BaseModel):
     p: int
     alpha: int
     beta: int
+
+    @validator('p')
+    def check_prime(cls, value):
+        if not isPrime(value):
+            raise ValueError(f"{value} is not a prime number")
+        return value
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:

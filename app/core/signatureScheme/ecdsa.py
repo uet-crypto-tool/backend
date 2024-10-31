@@ -21,8 +21,8 @@ class PrivateKey(BaseModel):
 
 
 def generateKey(curve_domain_name: str):
-    E = CurveDomainParamter.create(curve_domain_name)
-    n = E.field.n
+    E = CurveDomainParamter.get(curve_domain_name)
+    n = E.n
     G = E.g
     d = 1 + secrets.randbelow(n - 1)
     Q = G * d
@@ -35,10 +35,10 @@ def H(x: int) -> int:
 
 
 def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
-    E = CurveDomainParamter.create(privateKey.curve_domain_name)
+    E = CurveDomainParamter.get(privateKey.curve_domain_name)
     G = E.g
 
-    n = E.field.n
+    n = E.n
     r = 0
     s = 0
     while s == 0:
@@ -58,12 +58,12 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
 
 
 def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
-    E = CurveDomainParamter.create(publicKey.curve_domain_name)
+    E = CurveDomainParamter.get(publicKey.curve_domain_name)
     G = E.g
     Q = Point(E, publicKey.Q.x, publicKey.Q.y)
     r, s = signature
 
-    n = E.field.n
+    n = E.n
     w = inverse_mod(s, n)
     h = H(message)
     u1 = (h * w) % (n)

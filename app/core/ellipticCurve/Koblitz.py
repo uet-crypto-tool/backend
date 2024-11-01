@@ -39,18 +39,13 @@ def encode(
         chunk_size: int = 10,
         alphabet_size: int = 2**8
 ) -> Tuple[Tuple[Point], int]:
-    pool = multiprocessing.Pool()
-    encoded_messages = pool.map(
-        partial(encodeChunk,
-                curve_name=curve_name,
-                scale_factor=scale_factor,
-                alphabet_size=alphabet_size,
-                chunk_size=chunk_size),
-        [message[i: i + chunk_size]
-            for i in range(0, len(message), chunk_size)],
-    )
-    pool.close()
-    pool.join()
+    with multiprocessing.Pool() as pool:
+        encoded_messages = pool.map(
+            partial(encodeChunk, curve_name=curve_name, scale_factor=scale_factor,
+                    alphabet_size=alphabet_size, chunk_size=chunk_size),
+            (message[i:i + chunk_size]
+             for i in range(0, len(message), chunk_size))
+        )
 
     return tuple(encoded_messages), scale_factor
 
@@ -71,20 +66,15 @@ def decodeSinglePoint(
 
 
 def decode(
-    encoded: Tuple[Tuple[Point], int],
+    encoded_points: Tuple[Point],
+    scale_factor: int = 100,
     alphabet_size: int = 2**8,
 ) -> str:
-    encoded_points, scale_factor = encoded
-
-    pool = multiprocessing.Pool()
-    characters = []
-    characters = pool.starmap(
-        partial(decodeSinglePoint,
-                scale_factor=scale_factor,
-                alphabet_size=alphabet_size),
-        [(point, ) for point in encoded_points],
-    )
-    pool.close()
-    pool.join()
+    with multiprocessing.Pool() as pool:
+        characters = pool.starmap(
+            partial(decodeSinglePoint, scale_factor=scale_factor,
+                    alphabet_size=alphabet_size),
+            [(point,) for point in encoded_points]
+        )
 
     return "".join(characters)

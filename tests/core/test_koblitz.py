@@ -1,16 +1,23 @@
 from app.core.ellipticCurve import Koblitz
 import random
 from app.core.ellipticCurve.domain import CurveDomainParamter
+from app.core.cryptoSystem import ecc
 
 
 def test_pipline():
     message = "Hello, Elliptic Curve Cryptography! " * 10
     curve_name = random.choice(CurveDomainParamter.list())
-    print(f"curve_name: {curve_name}")
-    encoded_messages = Koblitz.encode(
+    encoded_points, scale_factor = Koblitz.encode(
         message=message, curve_name=curve_name)
-    print(f"encoded_message: {encoded_messages}")
-
-    decoded_message = Koblitz.decode(encoded_messages)
-    print(f"decoded_message:{decoded_message}")
+    decoded_message = Koblitz.decode(encoded_points, scale_factor)
     assert decoded_message == message
+
+
+def test_ecc_with_kiblitz():
+    message = "Hello, Elliptic Curve Cryptography! " * 10
+    curve_name = random.choice(CurveDomainParamter.list())
+    curve = CurveDomainParamter.get(curve_name)
+    privateKey, publicKey = ecc.generateKey(curve)
+    encrypted = ecc.encryptPlainText(publicKey, message)
+    decrypted = ecc.decryptPlainText(privateKey, encrypted)
+    assert message == decrypted

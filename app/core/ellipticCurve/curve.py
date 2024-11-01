@@ -17,7 +17,7 @@ class Curve(object):
         return (4 * self.a**3 + 27 * self.b**2) % self.p == 0
 
     def on_curve(self, x, y) -> bool:
-        return (y**2 - x**3 - self.a * x - self.b) % self.p == 0
+        return y**2 % self.p == (x**3 - self.a * x - self.b) % self.p
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Curve):

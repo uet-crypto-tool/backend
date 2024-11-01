@@ -5,10 +5,10 @@ import secrets
 
 
 def test_pipeline(test_client: TestClient):
-    curve_domain_name = random.choice(CurveDomainParamter.list())
-    print(f"Testing ECDSA on Curve Domain {curve_domain_name}")
+    curve_name = random.choice(CurveDomainParamter.list())
+    print(f"Testing ECDSA on Curve Domain {curve_name}")
     response = test_client.post(
-        "/signature_scheme/ecdsa/generate_key", json={"curve_domain_name": curve_domain_name})
+        "/signature_scheme/ecdsa/generate_key", json={"curve_name": curve_name})
     assert response.status_code == 200
     key = response.json()
 

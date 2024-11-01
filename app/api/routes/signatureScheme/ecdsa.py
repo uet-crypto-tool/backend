@@ -33,7 +33,7 @@ class VerifyResponse(BaseModel):
 @router.post("/ecdsa/generate_key",
              response_model=GenerateKeyResponse)
 async def ecdsa_generateKey(seed: ecdsa.Seed):
-    privateKey, publicKey = ecdsa.generateKey(seed.curve_domain_name)
+    privateKey, publicKey = ecdsa.generateKey(seed.curve_name)
     return {
         "privateKey": privateKey,
         "publicKey": publicKey,

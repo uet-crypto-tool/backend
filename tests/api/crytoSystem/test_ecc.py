@@ -4,11 +4,11 @@ from app.core.ellipticCurve.domain import CurveDomainParamter
 
 
 def test_pipeline_plain_text(test_client: TestClient):
-    curve_domain_name = random.choice(CurveDomainParamter.list())
-    print(f"Testing Ecc on Curve Domain {curve_domain_name}")
+    curve_name = random.choice(CurveDomainParamter.list())
+    print(f"Testing Ecc on Curve Domain {curve_name}")
     response = test_client.post(
         "/crypto_system/ecc/generate_key",
-        json={"curve_domain_name": curve_domain_name}
+        json={"curve_name": curve_name}
     )
     assert response.status_code == 200
     key = response.json()

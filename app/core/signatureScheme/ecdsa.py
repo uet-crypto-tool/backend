@@ -7,27 +7,27 @@ from pydantic import BaseModel
 
 
 class Seed(BaseModel):
-    curve_domain_name: str
+    curve_name: str
 
 
 class PublicKey(BaseModel):
-    curve_domain_name: str
+    curve_name: str
     Q: PointType
 
 
 class PrivateKey(BaseModel):
-    curve_domain_name: str
+    curve_name: str
     d: int
 
 
-def generateKey(curve_domain_name: str):
-    E = CurveDomainParamter.get(curve_domain_name)
+def generateKey(curve_name: str):
+    E = CurveDomainParamter.get(curve_name)
     n = E.n
     G = E.g
     d = 1 + secrets.randbelow(n - 1)
     Q = G * d
-    return (PrivateKey(curve_domain_name=curve_domain_name, d=d),
-            PublicKey(curve_domain_name=curve_domain_name, Q=Q.type()))
+    return (PrivateKey(curve_name=curve_name, d=d),
+            PublicKey(curve_name=curve_name, Q=Q.type()))
 
 
 def H(x: int) -> int:
@@ -35,7 +35,7 @@ def H(x: int) -> int:
 
 
 def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
-    E = CurveDomainParamter.get(privateKey.curve_domain_name)
+    E = CurveDomainParamter.get(privateKey.curve_name)
     G = E.g
 
     n = E.n
@@ -58,7 +58,7 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
 
 
 def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
-    E = CurveDomainParamter.get(publicKey.curve_domain_name)
+    E = CurveDomainParamter.get(publicKey.curve_name)
     G = E.g
     Q = Point(E, publicKey.Q.x, publicKey.Q.y)
     r, s = signature

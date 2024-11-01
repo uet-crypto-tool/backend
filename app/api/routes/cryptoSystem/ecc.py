@@ -32,7 +32,7 @@ class DecryptResponse(BaseModel):
 
 @router.post("/ecc/generate_key", response_model=GenerateKeyResponse)
 async def ecc_generate_key(seed: ecc.Seed):
-    private_key, public_key = ecc.generateKeyOnDomain(seed.curve_domain_name)
+    private_key, public_key = ecc.generateKeyOnDomain(seed.curve_name)
     return {
         "privateKey": private_key,
         "publicKey": public_key

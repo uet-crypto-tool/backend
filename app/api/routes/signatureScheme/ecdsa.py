@@ -41,14 +41,14 @@ async def ecdsa_generateKey(seed: ecdsa.Seed):
 
 
 @router.post("/ecdsa/sign", response_model=SignResponse)
-async def ecdsa_sign(req: SignRequest):
+async def ecdsa_sign(req: SignRequest) -> SignResponse:
     return SignResponse(
         signature=ecdsa.sign(req.privateKey, req.message)
     )
 
 
 @router.post("/ecdsa/verify", response_model=VerifyResponse)
-async def ecdsa_verify(req: VerifyRequest):
+async def ecdsa_verify(req: VerifyRequest) -> VerifyResponse:
     return VerifyResponse(
         is_valid=ecdsa.verify(req.publicKey, req.message, req.signature)
     )

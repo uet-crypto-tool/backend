@@ -23,7 +23,7 @@ class PublicKey(BaseModel):
     B: PointType
 
 
-def generateKeyOnDomain(curve_name: str):
+def generateKeyOnDomain(curve_name: str) -> Tuple[PrivateKey, PublicKey]:
     return generateKey(CurveDomainParamter.get(curve_name))
 
 
@@ -40,7 +40,9 @@ def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
 
 def encryptPlainText(publicKey: PublicKey, message: str) -> Tuple[Tuple[PointType, PointType]]:
     encoded_points, scale_factor = Koblitz.encode(
-        message=message, curve_name=publicKey.curve_name)
+        message=message,
+        curve_name=publicKey.curve_name
+    )
 
     with multiprocessing.Pool() as pool:
         encrypted_pairs = pool.map(

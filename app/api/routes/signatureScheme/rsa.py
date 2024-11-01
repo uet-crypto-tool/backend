@@ -40,12 +40,12 @@ async def rsa_generate_key(seed: rsa.Seed):
 
 
 @router.post("/rsa/sign", response_model=SignRespone)
-async def rsa_sign(req: SignRequest):
+async def rsa_sign(req: SignRequest) -> SignRespone:
     return SignRespone(signature=rsa.sign(req.privateKey, req.message))
 
 
 @router.post("/rsa/verify", response_model=VerifyResponse)
-async def rsa_verify(req: VerifyRequest):
+async def rsa_verify(req: VerifyRequest) -> VerifyResponse:
     return VerifyResponse(
         is_valid=rsa.verify(req.publicKey, req.message, req.signature)
     )

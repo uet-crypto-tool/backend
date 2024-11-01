@@ -39,10 +39,14 @@ async def rsa_generate_key(seed: rsa.Seed):
 
 
 @router.post("/rsa/encrypt", response_model=EncryptResponse)
-async def rsa_encrypt(req: EncryptRequest):
-    return EncryptResponse(encrypted_message=rsa.encrypt(req.publicKey, req.message))
+async def rsa_encrypt(req: EncryptRequest) -> EncryptResponse:
+    return EncryptResponse(
+        encrypted_message=rsa.encrypt(req.publicKey, req.message)
+    )
 
 
 @router.post("/rsa/decrypt", response_model=DecryptResponse)
-async def rsa_decrypt(req: DecryptRequest):
-    return DecryptResponse(decrypted_message=rsa.decrypt(req.privateKey, req.encrypted_message))
+async def rsa_decrypt(req: DecryptRequest) -> DecryptResponse:
+    return DecryptResponse(
+        decrypted_message=rsa.decrypt(req.privateKey, req.encrypted_message)
+    )

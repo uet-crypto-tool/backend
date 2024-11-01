@@ -40,14 +40,14 @@ async def elgamal_generate_key(seed: elgamal.Seed):
 
 
 @router.post("/elgamal/encrypt", response_model=EncryptResponse)
-async def elgamal_encrypt(req: EncryptRequest):
+async def elgamal_encrypt(req: EncryptRequest) -> EncryptResponse:
     return EncryptResponse(
         encrypted_message=elgamal.encrypt(req.publicKey, req.message)
     )
 
 
 @router.post("/elgamal/decrypt", response_model=DecryptResponse)
-async def elgamal_decrypt(req: DecryptRequest):
+async def elgamal_decrypt(req: DecryptRequest) -> DecryptResponse:
     return DecryptResponse(
         decrypted_message=elgamal.decrypt(
             req.privateKey, req.encrypted_message)

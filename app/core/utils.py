@@ -1,7 +1,7 @@
 from typing import Tuple
 
 
-def egcd(a, b):
+def egcd(a, b) -> Tuple[int, int, int]:
     if a == 0:
         return b, 0, 1
     else:
@@ -49,8 +49,10 @@ def indexToChar(i: int) -> str:
 
 
 def encodeString(m: str) -> int:
-    return sum([charToIndex(c) * 26 ** (len(m) - i - 1)
-                for i, c in enumerate(m.lower())])
+    return sum(
+        [charToIndex(c) * 26 ** (len(m) - i - 1)
+         for i, c in enumerate(m.lower())]
+    )
 
 
 def decodeString(n: int) -> str:

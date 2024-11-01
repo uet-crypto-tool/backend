@@ -40,7 +40,7 @@ async def ecc_generate_key(seed: ecc.Seed):
 
 
 @router.post("/ecc/encrypt", response_model=EncryptResponse)
-async def ecc_encrypt(req: EncryptRequest):
+async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
     encrypted_pairs = ecc.encryptPlainText(
         req.publicKey, req.message)
     print(encrypted_pairs)
@@ -48,7 +48,7 @@ async def ecc_encrypt(req: EncryptRequest):
 
 
 @router.post("/ecc/decrypt", response_model=DecryptResponse)
-async def ecc_decrypt(req: DecryptRequest):
+async def ecc_decrypt(req: DecryptRequest) -> DecryptResponse:
     decrypted_message = ecc.decryptPlainText(
         req.privateKey, req.encrypted_pairs)
     return DecryptResponse(decrypted_message=decrypted_message)

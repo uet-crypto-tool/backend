@@ -20,5 +20,5 @@ async def check_prime(req: CheckPrimeRequest):
 
 
 @router.post("/generate")
-async def generate_prime_has_bit_length(req: GeneratePrimeRequest):
-    return generators.generateProbablePrime(req.bitLength)
+async def generate_prime_has_bit_length(req: GeneratePrimeRequest) -> int:
+    return generators.generatePrimeUseAPI(req.bitLength)

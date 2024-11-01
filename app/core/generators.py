@@ -68,7 +68,7 @@ def generateProbablePrime(length: int) -> int:
         x += 2
 
 
-def GeneratePrimeUseAPI(length: int) -> int:
+def generatePrimeUseAPI(length: int) -> int:
     if length not in [2048, 4096, 8192]:
         raise Exception(
             "GenreatePrimeUseAPI only support length is 2048, 4096 or 8192")

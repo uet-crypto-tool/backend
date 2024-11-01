@@ -18,6 +18,6 @@ def test_ecc_with_kiblitz():
     curve_name = random.choice(CurveDomainParamter.list())
     curve = CurveDomainParamter.get(curve_name)
     privateKey, publicKey = ecc.generateKey(curve)
-    encrypted = ecc.encryptPlainText(publicKey, message)
-    decrypted = ecc.decryptPlainText(privateKey, encrypted)
-    assert message == decrypted
+    encrypted_pairs = ecc.encryptPlainText(publicKey, message)
+    decrypted = ecc.decryptPlainText(privateKey, encrypted_pairs)
+    assert decrypted == message

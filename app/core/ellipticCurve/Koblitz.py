@@ -10,13 +10,12 @@ def encodeChunk(
         message: str,
         curve_name: str = "secp521r1",
         scale_factor: int = 100,
-        chunk_size: int = 10,
         alphabet_size: int = 2**8
 ) -> Tuple[Point]:
     curve = CurveDomainParamter.get(curve_name=curve_name)
     message_decimal = sum(
         ord(char) * (alphabet_size**i)
-        for i, char in enumerate(message[:chunk_size])
+        for i, char in enumerate(message)
     )
 
     for j in range(1, scale_factor - 1):
@@ -41,13 +40,15 @@ def encode(
 ) -> Tuple[Tuple[Point], int]:
     with multiprocessing.Pool() as pool:
         encoded_messages = pool.map(
-            partial(encodeChunk, curve_name=curve_name, scale_factor=scale_factor,
-                    alphabet_size=alphabet_size, chunk_size=chunk_size),
+            partial(encodeChunk,
+                    curve_name=curve_name,
+                    scale_factor=scale_factor,
+                    alphabet_size=alphabet_size),
             (message[i:i + chunk_size]
              for i in range(0, len(message), chunk_size))
         )
 
-    return tuple(encoded_messages), scale_factor
+    return encoded_messages, scale_factor
 
 
 def decodeSinglePoint(

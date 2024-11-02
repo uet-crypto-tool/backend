@@ -2,9 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.main import router
 import uvicorn
-import resource
 import sys
-resource.setrlimit(resource.RLIMIT_STACK, (2**29, -1))
+
 sys.setrecursionlimit(10**6)
 sys.set_int_max_str_digits(0)
 

@@ -1,23 +1,8 @@
 from app.core.ellipticCurve.domain import CurveDomainParamter
-from app.core.ellipticCurve.point import Point, PointType
+from app.core.ellipticCurve.point import Point
 from app.core.utils import inverse_mod, mul_mod
 from app.core.generators import randomIntInRange
-from typing import Tuple
-from pydantic import BaseModel
-
-
-class Seed(BaseModel):
-    curve_name: str
-
-
-class PublicKey(BaseModel):
-    curve_name: str
-    Q: PointType
-
-
-class PrivateKey(BaseModel):
-    curve_name: str
-    d: int
+from app.schemas.ecdsa_schemas import Seed, PrivateKey, PublicKey, Signature
 
 
 def generateKey(curve_name: str):
@@ -34,7 +19,7 @@ def H(x: int) -> int:
     return x
 
 
-def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
+def sign(privateKey: PrivateKey, message: int) -> Signature:
     curve = CurveDomainParamter.get(privateKey.curve_name)
     G = curve.g
     n = curve.n
@@ -53,14 +38,14 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
         k_inv = inverse_mod(k, n)
         s = mul_mod(h_plus_dr_mod_n, k_inv, n)
 
-    return (r, s)
+    return Signature(r=r, s=s)
 
 
-def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
+def verify(publicKey: PublicKey, message: int, signature: Signature) -> bool:
     curve = CurveDomainParamter.get(publicKey.curve_name)
     G = curve.g
     Q = Point(curve, publicKey.Q.x, publicKey.Q.y)
-    r, s = signature
+    r, s = signature.r, signature.s
 
     n = curve.n
     w = inverse_mod(s, n)

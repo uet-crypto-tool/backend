@@ -3,31 +3,13 @@ import multiprocessing
 from typing import Tuple
 from functools import partial
 from app.core.ellipticCurve.point import Point, PointType
-from app.core.ellipticCurve.curve import Curve
 from app.core.ellipticCurve.domain import CurveDomainParamter
 from app.core.ellipticCurve import Koblitz
-from pydantic import BaseModel
+from app.schemas.ecc_schemas import Seed, PrivateKey, PublicKey, EncryptedMessage
 
 
-class Seed(BaseModel):
-    curve_name: str
-
-
-class PrivateKey(BaseModel):
-    curve_name: str
-    secret_number: int
-
-
-class PublicKey(BaseModel):
-    curve_name: str
-    B: PointType
-
-
-def generateKeyOnDomain(curve_name: str) -> Tuple[PrivateKey, PublicKey]:
-    return generateKey(CurveDomainParamter.get(curve_name))
-
-
-def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
+def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
+    curve = CurveDomainParamter.get(seed.curve_name)
     secret_number = secrets.randbits(1024)
     B = secret_number * curve.g
     return (
@@ -36,22 +18,20 @@ def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
     )
 
 
-def encryptPlainText(
-    publicKey: PublicKey, message: str
-) -> Tuple[Tuple[PointType, PointType]]:
+def encrypt(publicKey: PublicKey, message: str) -> EncryptedMessage:
     encoded_points, scale_factor = Koblitz.encode(
         message=message, curve_name=publicKey.curve_name
     )
 
     with multiprocessing.Pool() as pool:
         encrypted_pairs = pool.map(
-            partial(encrypt, publicKey), (point.type() for point in encoded_points)
+            partial(encryptChunk, publicKey), (point.type() for point in encoded_points)
         )
 
-    return encrypted_pairs
+    return EncryptedMessage(pair_points=encrypted_pairs)
 
 
-def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
+def encryptChunk(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
     curve = CurveDomainParamter.get(publicKey.curve_name)
     P = curve.g
 
@@ -64,12 +44,12 @@ def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
     return (M1.type(), M2.type())
 
 
-def decryptPlainText(
-    privateKey: PrivateKey, encrypted_pairs: Tuple[Tuple[PointType, PointType]]
-) -> str:
+def decrypt(privateKey: PrivateKey, encryptedMessage: EncryptedMessage) -> str:
 
     with multiprocessing.Pool() as pool:
-        decrypt_points = pool.map(partial(decrypt, privateKey), encrypted_pairs)
+        decrypt_points = pool.map(
+            partial(decryptChunk, privateKey), encryptedMessage.pair_points
+        )
 
     curve = CurveDomainParamter.get(privateKey.curve_name)
     decrypt_points = [Point(curve, p.x, p.y) for p in decrypt_points]
@@ -77,7 +57,7 @@ def decryptPlainText(
     return decoded
 
 
-def decrypt(
+def decryptChunk(
     privateKey: PrivateKey, encrypted_message: Tuple[PointType, PointType]
 ) -> PointType:
     curve = CurveDomainParamter.get(privateKey.curve_name)

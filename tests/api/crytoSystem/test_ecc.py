@@ -24,7 +24,7 @@ def test_pipeline_plain_text(test_client: TestClient):
         "/crypto_system/ecc/decrypt",
         json={
             "privateKey": key["privateKey"],
-            "encrypted_pairs": res["encrypted_pairs"],
+            "encrypted_message": res["encrypted_message"],
         },
     )
     assert response.status_code == 200

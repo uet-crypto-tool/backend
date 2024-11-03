@@ -1,23 +1,6 @@
-import secrets
-from app.core.utils import inverse_mod, gcd, powermod, randomRelativePrime
-from app.core.generators import randomIntInRange
+from app.core.utils import inverse_mod, powermod, randomRelativePrime
+from app.schemas.rsa_schemas import Seed, PublicKey, PrivateKey, EncryptedMessage
 from typing import Tuple
-from pydantic import BaseModel
-
-
-class Seed(BaseModel):
-    p: int
-    q: int
-
-
-class PublicKey(BaseModel):
-    n: int
-    e: int
-
-
-class PrivateKey(BaseModel):
-    n: int
-    d: int
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
@@ -29,9 +12,9 @@ def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
     return (PrivateKey(n=n, d=d), PublicKey(n=n, e=e))
 
 
-def encrypt(publicKey: PublicKey, message: int) -> int:
-    return powermod(message, publicKey.e, publicKey.n)
+def encrypt(publicKey: PublicKey, message: int) -> EncryptedMessage:
+    return EncryptedMessage(value=powermod(message, publicKey.e, publicKey.n))
 
 
-def decrypt(privateKey: PrivateKey, ecrypted_message: int) -> int:
-    return powermod(ecrypted_message, privateKey.d, privateKey.n)
+def decrypt(privateKey: PrivateKey, ecrypted_message: EncryptedMessage) -> int:
+    return powermod(ecrypted_message.value, privateKey.d, privateKey.n)

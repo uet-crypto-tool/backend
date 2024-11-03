@@ -1,21 +1,6 @@
 from app.core.utils import inverse_mod, powermod, randomRelativePrime
-from pydantic import BaseModel
 from typing import Tuple
-
-
-class Seed(BaseModel):
-    p: int
-    q: int
-
-
-class PrivateKey(BaseModel):
-    n: int
-    e: int
-
-
-class PublicKey(BaseModel):
-    n: int
-    d: int
+from app.schemas.rsa_schemas import Seed, PublicKey, PrivateKey, Signature
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
@@ -24,16 +9,16 @@ def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
     phi_n = (p - 1) * (q - 1)
     e = randomRelativePrime(phi_n)
     d = inverse_mod(e, phi_n)
-    return (PrivateKey(n=n, e=e), PublicKey(n=n, d=d))
+    return (PrivateKey(n=n, d=e), PublicKey(n=n, e=d))
 
 
 def H(m: int) -> int:
     return m
 
 
-def sign(privateKey: PrivateKey, message: int) -> int:
-    return powermod(H(message), privateKey.e, privateKey.n)
+def sign(privateKey: PrivateKey, message: int) -> Signature:
+    return Signature(value=powermod(H(message), privateKey.d, privateKey.n))
 
 
-def verify(publicKey: PublicKey, message: int, signature: int) -> bool:
-    return H(message) == powermod(signature, publicKey.d, publicKey.n)
+def verify(publicKey: PublicKey, message: int, signature: Signature) -> bool:
+    return H(message) == powermod(signature.value, publicKey.e, publicKey.n)

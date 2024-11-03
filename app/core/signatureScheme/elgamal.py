@@ -1,23 +1,6 @@
 from app.core.utils import inverse_mod, powermod, mul_mod, randomRelativePrime
 from typing import Tuple
-from pydantic import BaseModel
-
-
-class Seed(BaseModel):
-    p: int
-    a: int
-
-
-class PublicKey(BaseModel):
-    p: int
-    alpha: int
-    beta: int
-
-
-class PrivateKey(BaseModel):
-    p: int
-    a: int
-    alpha: int
+from app.schemas.elgamal_schemas import Seed, PrivateKey, PublicKey, Signature
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
@@ -31,7 +14,7 @@ def H(message: int) -> int:
     return message
 
 
-def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
+def sign(privateKey: PrivateKey, message: int) -> Signature:
     k = randomRelativePrime(privateKey.p - 1)
     y1 = powermod(privateKey.alpha, k, privateKey.p)
 
@@ -39,11 +22,11 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
     h_minus_ay1_mod = (H(message) - ay1_mod) % (privateKey.p - 1)
     k_inv = inverse_mod(k, privateKey.p - 1)
     y2 = mul_mod(h_minus_ay1_mod, k_inv, privateKey.p - 1)
-    return (y1, y2)
+    return Signature(y1=y1, y2=y2)
 
 
-def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
-    y1, y2 = signature
+def verify(publicKey: PublicKey, message: int, signature: Signature) -> bool:
+    y1, y2 = signature.y1, signature.y2
     v1 = mul_mod(
         powermod(publicKey.beta, y1, publicKey.p),
         powermod(y1, y2, publicKey.p),

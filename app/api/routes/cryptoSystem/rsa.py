@@ -1,37 +1,20 @@
 from fastapi import APIRouter
 from app.core.cryptoSystem import rsa
-from pydantic import BaseModel
+from app.schemas.rsa_schemas import (
+    GenerateKeyResponse,
+    EncryptRequest,
+    EncryptResponse,
+    DecryptRequest,
+    DecryptResponse,
+)
 
 router = APIRouter()
-
-
-class GenerateKeyResponse(BaseModel):
-    privateKey: rsa.PrivateKey
-    publicKey: rsa.PublicKey
-
-
-class EncryptRequest(BaseModel):
-    publicKey: rsa.PublicKey
-    message: int
-
-
-class EncryptResponse(BaseModel):
-    encrypted_message: int
-
-
-class DecryptRequest(BaseModel):
-    privateKey: rsa.PrivateKey
-    encrypted_message: int
-
-
-class DecryptResponse(BaseModel):
-    decrypted_message: int
 
 
 @router.post("/rsa/generate_key", response_model=GenerateKeyResponse)
 async def rsa_generate_key(seed: rsa.Seed):
     private_key, public_key = rsa.generateKey(seed)
-    return {"privateKey": private_key, "publicKey": public_key}
+    return GenerateKeyResponse(privateKey=private_key, publicKey=public_key)
 
 
 @router.post("/rsa/encrypt", response_model=EncryptResponse)

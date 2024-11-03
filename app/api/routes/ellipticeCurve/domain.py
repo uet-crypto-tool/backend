@@ -11,4 +11,4 @@ async def elliptic_curve_domain_params():
 
 @router.get("/domains/{name}")
 async def elliptice_curve_domain_param(name: str):
-    return CurveDomainParamter[name]
+    return CurveDomainParamter[name].value.to_json()

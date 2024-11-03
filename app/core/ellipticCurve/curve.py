@@ -1,6 +1,7 @@
 from __future__ import annotations
 import app.core.ellipticCurve.point as point
 from typing import Tuple
+import json
 
 
 class Curve(object):
@@ -52,3 +53,15 @@ class Curve(object):
 
     def __repr__(self) -> str:
         return self.__str__()
+
+    def to_json(self) -> str:
+        return {
+            "name": self.name,
+            "p": str(self.p),
+            "a": str(self.a),
+            "b": str(self.b),
+            "g": {"x": str(self.g.x), "y": str(self.g.y)},
+            "n": str(self.n),
+            "h": str(self.h),
+            "is_singular": self.is_singular(),
+        }

@@ -76,5 +76,5 @@ def generatePrimeUseAPI(length: int) -> int:
     return int(response.json()["p"]["base10"])
 
 
-def randomIntInRange(a: int, b: int) -> int:
-    return a + secrets.randbelow(b)
+def randomIntInRange(lower: int, upper: int) -> int:
+    return lower + secrets.randbelow(upper - lower + 1)

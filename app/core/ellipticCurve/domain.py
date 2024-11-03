@@ -5,7 +5,7 @@ from enum import Enum
 class CurveDomainParamter(Enum):
     @classmethod
     def list(cls) -> list:
-        return list(map(lambda c: c.name, cls))
+        return list(map(lambda curve: curve.name, cls))
 
     @classmethod
     def get(cls, curve_name) -> Curve:

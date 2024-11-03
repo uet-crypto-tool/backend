@@ -28,10 +28,8 @@ def generateKeyOnDomain(curve_name: str) -> Tuple[PrivateKey, PublicKey]:
 
 
 def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
-    E = curve
-    P = E.g
     secret_number = secrets.randbits(1024)
-    B = secret_number * P
+    B = secret_number * curve.g
     return (
         PrivateKey(curve_name=curve.name, secret_number=secret_number),
         PublicKey(curve_name=curve.name, B=PointType(x=B.x, y=B.y)),
@@ -54,12 +52,11 @@ def encryptPlainText(
 
 
 def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
-    E = CurveDomainParamter.get(publicKey.curve_name)
-    P = E.g
+    curve = CurveDomainParamter.get(publicKey.curve_name)
+    P = curve.g
 
-    B = publicKey.B
-    B = Point(E, B.x, B.y)
-    M = Point(E, M.x, M.y)
+    B = Point(curve, publicKey.B.x, publicKey.B.y)
+    M = Point(curve, M.x, M.y)
 
     k = secrets.randbits(8)
     M1 = k * P
@@ -71,11 +68,8 @@ def decryptPlainText(
     privateKey: PrivateKey, encrypted_pairs: Tuple[Tuple[PointType, PointType]]
 ) -> str:
 
-    pool = multiprocessing.Pool()
     with multiprocessing.Pool() as pool:
         decrypt_points = pool.map(partial(decrypt, privateKey), encrypted_pairs)
-    pool.close()
-    pool.join()
 
     curve = CurveDomainParamter.get(privateKey.curve_name)
     decrypt_points = [Point(curve, p.x, p.y) for p in decrypt_points]
@@ -86,9 +80,7 @@ def decryptPlainText(
 def decrypt(
     privateKey: PrivateKey, encrypted_message: Tuple[PointType, PointType]
 ) -> PointType:
-    E = CurveDomainParamter.get(privateKey.curve_name)
-    M1, M2 = encrypted_message
-    M1 = Point(E, M1.x, M1.y)
-    M2 = Point(E, M2.x, M2.y)
+    curve = CurveDomainParamter.get(privateKey.curve_name)
+    M1, M2 = map(lambda p: Point(curve, p.x, p.y), encrypted_message)
     M = M2 - M1 * privateKey.secret_number
     return M.type()

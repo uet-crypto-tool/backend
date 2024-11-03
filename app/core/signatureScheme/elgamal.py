@@ -21,8 +21,7 @@ class PrivateKey(BaseModel):
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
-    p = seed.p
-    a = seed.a
+    p, a = seed.p, seed.a
     alpha = randomRelativePrime(p)
     beta = powermod(alpha, a, p)
     return (PrivateKey(p=p, a=a, alpha=alpha), PublicKey(p=p, alpha=alpha, beta=beta))
@@ -33,7 +32,7 @@ def H(message: int) -> int:
 
 
 def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
-    k = randomRelativePrime(privateKey.p)
+    k = randomRelativePrime(privateKey.p - 1)
     y1 = powermod(privateKey.alpha, k, privateKey.p)
 
     ay1_mod = mul_mod(privateKey.a, y1, privateKey.p - 1)

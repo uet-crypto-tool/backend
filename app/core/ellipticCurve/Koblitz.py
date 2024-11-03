@@ -5,6 +5,21 @@ from functools import partial
 from app.core.ellipticCurve.point import Point
 from app.core.utils import powermod, encodeString, decodeString
 from app.core.ellipticCurve.domain import CurveDomainParamter
+from app.core.ellipticCurve.curve import Curve
+
+
+def getPointOnCurve(message_decimal: int,  curve: Curve, scale_factor: int):
+    for j in range(1, scale_factor - 1):
+        x = (scale_factor * message_decimal + j) % curve.p
+        s = (x**3 + curve.a * x + curve.b) % curve.p
+
+        if s == powermod(s, (curve.p + 1) // 2, curve.p):
+            y = powermod(s, (curve.p + 1) // 4, curve.p)
+
+            if curve.on_curve(x, y):
+                return Point(curve, x, y)
+
+    raise ValueError("Could not find a valid point on the curve.")
 
 
 def encodeChunk(
@@ -15,18 +30,7 @@ def encodeChunk(
 ) -> Tuple[Point]:
     curve = CurveDomainParamter.get(curve_name=curve_name)
     message_decimal = encodeString(message, alphabet_size)
-
-    for j in range(1, scale_factor - 1):
-        x = (scale_factor * message_decimal + j) % curve.p
-        s = (x**3 + curve.a * x + curve.b) % curve.p
-
-        if s == powermod(s, (curve.p + 1) // 2, curve.p):
-            y = powermod(s, (curve.p + 1) // 4, curve.p)
-
-            if curve.on_curve(x, y):
-                break
-
-    return Point(curve, x, y)
+    return getPointOnCurve(message_decimal, curve, scale_factor)
 
 
 def encode(

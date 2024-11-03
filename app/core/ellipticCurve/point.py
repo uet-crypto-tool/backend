@@ -22,12 +22,11 @@ class Point(object):
         self.x = x
         self.y = y
         self.p = self.curve.p
-        self.on_curve = True
-        if not self.curve.on_curve(self.x, self.y):
+        self.on_curve = self.curve.on_curve(self.x, self.y)
+        if not self.on_curve:
             warnings.warn(
                 'Point (%d, %d) is not on curve "%s"' % (self.x, self.y, self.curve)
             )
-            self.on_curve = False
 
     def __m(self, p, q):
         if p.x == q.x:

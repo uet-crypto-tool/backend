@@ -36,7 +36,7 @@ def gcd(a: int, b: int) -> int:
 
 def randomRelativePrime(p) -> int:
     k = randomIntInRange(2, p - 2)
-    while gcd(k, p - 1) != 1:
+    while gcd(k, p) != 1:
         k = randomIntInRange(2, p - 2)
     return k
 

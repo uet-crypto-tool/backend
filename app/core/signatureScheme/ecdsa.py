@@ -21,11 +21,9 @@ class PrivateKey(BaseModel):
 
 
 def generateKey(curve_name: str):
-    E = CurveDomainParamter.get(curve_name)
-    n = E.n
-    G = E.g
-    d = randomIntInRange(1, n - 1)
-    Q = G * d
+    curve = CurveDomainParamter.get(curve_name)
+    d = randomIntInRange(1, curve.n - 1)
+    Q = curve.g * d
     return (
         PrivateKey(curve_name=curve_name, d=d),
         PublicKey(curve_name=curve_name, Q=Q.type()),
@@ -37,9 +35,9 @@ def H(x: int) -> int:
 
 
 def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
-    E = CurveDomainParamter.get(privateKey.curve_name)
-    G = E.g
-    n = E.n
+    curve = CurveDomainParamter.get(privateKey.curve_name)
+    G = curve.g
+    n = curve.n
     r = 0
     s = 0
     while s == 0:
@@ -59,12 +57,12 @@ def sign(privateKey: PrivateKey, message: int) -> Tuple[int, int]:
 
 
 def verify(publicKey: PublicKey, message: int, signature: Tuple[int, int]) -> bool:
-    E = CurveDomainParamter.get(publicKey.curve_name)
-    G = E.g
-    Q = Point(E, publicKey.Q.x, publicKey.Q.y)
+    curve = CurveDomainParamter.get(publicKey.curve_name)
+    G = curve.g
+    Q = Point(curve, publicKey.Q.x, publicKey.Q.y)
     r, s = signature
 
-    n = E.n
+    n = curve.n
     w = inverse_mod(s, n)
     h = H(message)
     u1 = mul_mod(h, w, n)

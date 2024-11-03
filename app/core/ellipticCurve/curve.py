@@ -4,7 +4,16 @@ from typing import Tuple
 
 
 class Curve(object):
-    def __init__(self, p: int, a: int, b: int, g: Tuple[int, int], n: int, h: int, name="undefined"):
+    def __init__(
+        self,
+        p: int,
+        a: int,
+        b: int,
+        g: Tuple[int, int],
+        n: int,
+        h: int,
+        name="undefined",
+    ):
         self.name = name
         self.p = p
         self.a = a
@@ -22,11 +31,13 @@ class Curve(object):
     def __eq__(self, other) -> bool:
         if not isinstance(other, Curve):
             return False
-        return self.p == other.p \
-            and self.a == other.a\
-            and self.b == other.b\
-            and self.n == other.n\
+        return (
+            self.p == other.p
+            and self.a == other.a
+            and self.b == other.b
+            and self.n == other.n
             and self.h == other.h
+        )
 
     def __ne__(self, other) -> point.Point:
         return not self.__eq__(other)

@@ -1316,8 +1316,7 @@ def millerRabin(n: int, warnings: bool = False) -> bool:
                             "List of small primes for Miller-Rabin bases has been exhausted for n="
                             + str(n)
                         )
-                        print(
-                            "The result is probabalistically determined to be prime.")
+                        print("The result is probabalistically determined to be prime.")
                     return True
                 failure = True
         if not failure:

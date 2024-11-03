@@ -34,25 +34,26 @@ def generateKey(curve: Curve) -> Tuple[PrivateKey, PublicKey]:
     B = secret_number * P
     return (
         PrivateKey(curve_name=curve.name, secret_number=secret_number),
-        PublicKey(curve_name=curve.name, B=PointType(x=B.x, y=B.y))
+        PublicKey(curve_name=curve.name, B=PointType(x=B.x, y=B.y)),
     )
 
 
-def encryptPlainText(publicKey: PublicKey, message: str) -> Tuple[Tuple[PointType, PointType]]:
+def encryptPlainText(
+    publicKey: PublicKey, message: str
+) -> Tuple[Tuple[PointType, PointType]]:
     encoded_points, scale_factor = Koblitz.encode(
-        message=message,
-        curve_name=publicKey.curve_name
+        message=message, curve_name=publicKey.curve_name
     )
 
     with multiprocessing.Pool() as pool:
         encrypted_pairs = pool.map(
-            partial(encrypt, publicKey), (point.type() for point in encoded_points))
+            partial(encrypt, publicKey), (point.type() for point in encoded_points)
+        )
 
     return encrypted_pairs
 
 
-def encrypt(publicKey: PublicKey,
-            M: PointType) -> Tuple[PointType, PointType]:
+def encrypt(publicKey: PublicKey, M: PointType) -> Tuple[PointType, PointType]:
     E = CurveDomainParamter.get(publicKey.curve_name)
     P = E.g
 
@@ -66,25 +67,25 @@ def encrypt(publicKey: PublicKey,
     return (M1.type(), M2.type())
 
 
-def decryptPlainText(privateKey: PrivateKey,
-                     encrypted_pairs: Tuple[Tuple[PointType, PointType]]) -> str:
+def decryptPlainText(
+    privateKey: PrivateKey, encrypted_pairs: Tuple[Tuple[PointType, PointType]]
+) -> str:
 
     pool = multiprocessing.Pool()
     with multiprocessing.Pool() as pool:
-        decrypt_points = pool.map(
-            partial(decrypt, privateKey), encrypted_pairs)
+        decrypt_points = pool.map(partial(decrypt, privateKey), encrypted_pairs)
     pool.close()
     pool.join()
 
     curve = CurveDomainParamter.get(privateKey.curve_name)
     decrypt_points = [Point(curve, p.x, p.y) for p in decrypt_points]
-    decoded = Koblitz.decode(
-        encoded_points=decrypt_points)
+    decoded = Koblitz.decode(encoded_points=decrypt_points)
     return decoded
 
 
-def decrypt(privateKey: PrivateKey,
-            encrypted_message: Tuple[PointType, PointType]) -> PointType:
+def decrypt(
+    privateKey: PrivateKey, encrypted_message: Tuple[PointType, PointType]
+) -> PointType:
     E = CurveDomainParamter.get(privateKey.curve_name)
     M1, M2 = encrypted_message
     M1 = Point(E, M1.x, M1.y)

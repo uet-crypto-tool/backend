@@ -29,14 +29,10 @@ class DecryptResponse(BaseModel):
     decrypted_message: int
 
 
-@router.post("/elgamal/generate_key",
-             response_model=GenerateKeyResponse)
+@router.post("/elgamal/generate_key", response_model=GenerateKeyResponse)
 async def elgamal_generate_key(seed: elgamal.Seed):
     private_key, public_key = elgamal.generateKey(seed)
-    return {
-        "privateKey": private_key,
-        "publicKey": public_key
-    }
+    return {"privateKey": private_key, "publicKey": public_key}
 
 
 @router.post("/elgamal/encrypt", response_model=EncryptResponse)
@@ -49,6 +45,5 @@ async def elgamal_encrypt(req: EncryptRequest) -> EncryptResponse:
 @router.post("/elgamal/decrypt", response_model=DecryptResponse)
 async def elgamal_decrypt(req: DecryptRequest) -> DecryptResponse:
     return DecryptResponse(
-        decrypted_message=elgamal.decrypt(
-            req.privateKey, req.encrypted_message)
+        decrypted_message=elgamal.decrypt(req.privateKey, req.encrypted_message)
     )

@@ -30,8 +30,7 @@ class VerifyResponse(BaseModel):
     is_valid: bool
 
 
-@router.post("/elgamal/generate_key",
-             response_model=GenerateKeyResponse)
+@router.post("/elgamal/generate_key", response_model=GenerateKeyResponse)
 async def elgamal_generateKey(seed: elgamal.Seed):
     privateKey, publicKey = elgamal.generateKey(seed)
     return {
@@ -42,9 +41,7 @@ async def elgamal_generateKey(seed: elgamal.Seed):
 
 @router.post("/elgamal/sign", response_model=SignResponse)
 async def elgamal_sign(req: SignRequest) -> SignResponse:
-    return SignResponse(
-        signature=elgamal.sign(req.privateKey, req.message)
-    )
+    return SignResponse(signature=elgamal.sign(req.privateKey, req.message))
 
 
 @router.post("/elgamal/verify", response_model=VerifyResponse)

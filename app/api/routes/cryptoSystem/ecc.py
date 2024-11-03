@@ -33,22 +33,17 @@ class DecryptResponse(BaseModel):
 @router.post("/ecc/generate_key", response_model=GenerateKeyResponse)
 async def ecc_generate_key(seed: ecc.Seed):
     private_key, public_key = ecc.generateKeyOnDomain(seed.curve_name)
-    return {
-        "privateKey": private_key,
-        "publicKey": public_key
-    }
+    return {"privateKey": private_key, "publicKey": public_key}
 
 
 @router.post("/ecc/encrypt", response_model=EncryptResponse)
 async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
-    encrypted_pairs = ecc.encryptPlainText(
-        req.publicKey, req.message)
+    encrypted_pairs = ecc.encryptPlainText(req.publicKey, req.message)
     print(encrypted_pairs)
     return EncryptResponse(encrypted_pairs=encrypted_pairs)
 
 
 @router.post("/ecc/decrypt", response_model=DecryptResponse)
 async def ecc_decrypt(req: DecryptRequest) -> DecryptResponse:
-    decrypted_message = ecc.decryptPlainText(
-        req.privateKey, req.encrypted_pairs)
+    decrypted_message = ecc.decryptPlainText(req.privateKey, req.encrypted_pairs)
     return DecryptResponse(decrypted_message=decrypted_message)

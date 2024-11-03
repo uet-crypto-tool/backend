@@ -25,8 +25,7 @@ class Point(object):
         self.on_curve = True
         if not self.curve.on_curve(self.x, self.y):
             warnings.warn(
-                'Point (%d, %d) is not on curve "%s"' % (
-                    self.x, self.y, self.curve)
+                'Point (%d, %d) is not on curve "%s"' % (self.x, self.y, self.curve)
             )
             self.on_curve = False
 
@@ -56,8 +55,7 @@ class Point(object):
                 y_r = -(self.y + m * (x_r - self.x)) % self.p
                 return Point(self.curve, x_r, y_r)
             else:
-                raise ValueError(
-                    "Cannot add points belonging to different curves")
+                raise ValueError("Cannot add points belonging to different curves")
         else:
             raise TypeError(
                 "Unsupported operand type(s) for +: '%s' and '%s'"

@@ -28,21 +28,15 @@ class DecryptResponse(BaseModel):
     decrypted_message: int
 
 
-@router.post("/rsa/generate_key",
-             response_model=GenerateKeyResponse)
+@router.post("/rsa/generate_key", response_model=GenerateKeyResponse)
 async def rsa_generate_key(seed: rsa.Seed):
     private_key, public_key = rsa.generateKey(seed)
-    return {
-        "privateKey": private_key,
-        "publicKey": public_key
-    }
+    return {"privateKey": private_key, "publicKey": public_key}
 
 
 @router.post("/rsa/encrypt", response_model=EncryptResponse)
 async def rsa_encrypt(req: EncryptRequest) -> EncryptResponse:
-    return EncryptResponse(
-        encrypted_message=rsa.encrypt(req.publicKey, req.message)
-    )
+    return EncryptResponse(encrypted_message=rsa.encrypt(req.publicKey, req.message))
 
 
 @router.post("/rsa/decrypt", response_model=DecryptResponse)

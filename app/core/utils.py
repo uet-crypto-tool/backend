@@ -1,4 +1,5 @@
 from typing import Tuple
+from app.core.generators import randomIntInRange
 
 
 def egcd(a, b) -> Tuple[int, int, int]:
@@ -19,6 +20,10 @@ def inverse_mod(a: int, p: int) -> int:
         return x % p
 
 
+def mul_mod(a: int, b: int, p: int) -> int:
+    return ((a % p) * (b % p)) % p
+
+
 def powermod(a: int, b: int, p: int) -> int:
     return pow(a, b, p)
 
@@ -29,35 +34,29 @@ def gcd(a: int, b: int) -> int:
     return a
 
 
-def xgcd(a: int, b: int) -> Tuple[int, int, int]:
-    prevx, x = 1, 0
-    prevy, y = 0, 1
-    while b:
-        q = int(a / b)
-        x, prevx = prevx - q*x, x
-        y, prevy = prevy - q*y, y
-        a, b = b, a % b
-    return a, prevx, prevy
+def randomRelativePrime(p) -> int:
+    k = randomIntInRange(2, p - 2)
+    while gcd(k, p - 1) != 1:
+        k = randomIntInRange(2, p - 2)
+    return k
 
 
 def charToIndex(c: str) -> int:
-    return ord(c.lower()) - ord('a') + 1
+    return ord(c.lower()) - ord("a") + 1
 
 
 def indexToChar(i: int) -> str:
-    return chr(ord('a') + i - 1)
+    return chr(ord("a") + i - 1)
 
 
-def encodeString(m: str) -> int:
-    return sum(
-        [charToIndex(c) * 26 ** (len(m) - i - 1)
-         for i, c in enumerate(m.lower())]
-    )
+def encodeString(message: str, alphabet_size: int = 2**8) -> int:
+    return sum(ord(char) * (alphabet_size**i) for i, char in enumerate(message))
 
 
-def decodeString(n: int) -> str:
-    res = ""
-    while n > 0:
-        n, i = divmod(n, 26)
-        res = indexToChar(i) + res
-    return res
+def decodeString(message_decimal: int, alphabet_size: int = 2**8) -> str:
+    characters = []
+    while message_decimal != 0:
+        characters.append(chr(message_decimal % alphabet_size))
+        message_decimal //= alphabet_size
+
+    return "".join(characters)

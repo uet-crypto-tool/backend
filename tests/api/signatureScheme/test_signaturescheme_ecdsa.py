@@ -8,24 +8,28 @@ def test_pipeline(test_client: TestClient):
     curve_name = random.choice(CurveDomainParamter.list())
     print(f"Testing ECDSA on Curve Domain {curve_name}")
     response = test_client.post(
-        "/signature_scheme/ecdsa/generate_key", json={"curve_name": curve_name})
+        "/signature_scheme/ecdsa/generate_key", json={"curve_name": curve_name}
+    )
     assert response.status_code == 200
     key = response.json()
 
     message = secrets.randbits(8)
     response = test_client.post(
-        "/signature_scheme/ecdsa/sign", json={
-            "privateKey": key["privateKey"],
-            "message": message})
+        "/signature_scheme/ecdsa/sign",
+        json={"privateKey": key["privateKey"], "message": message},
+    )
     assert response.status_code == 200
     res = response.json()
     signature = res["signature"]
 
     response = test_client.post(
-        "/signature_scheme/ecdsa/verify", json={
+        "/signature_scheme/ecdsa/verify",
+        json={
             "publicKey": key["publicKey"],
             "message": message,
-            "signature": signature})
+            "signature": signature,
+        },
+    )
     assert response.status_code == 200
     res = response.json()
 

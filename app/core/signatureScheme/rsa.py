@@ -1,5 +1,6 @@
 import secrets
 from app.core.utils import inverse_mod, gcd, powermod
+from app.core.generators import randomIntInRange
 from pydantic import BaseModel
 from typing import Tuple
 
@@ -32,9 +33,9 @@ def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
 
 
 def generatePrivateKey(phi_n) -> int:
-    k = 2 + secrets.randbelow(phi_n - 1)
+    k = randomIntInRange(2, phi_n - 1)
     while gcd(k, phi_n) != 1:
-        k = 2 + secrets.randbelow(phi_n - 1)
+        k = randomIntInRange(2, phi_n - 1)
     return k
 
 

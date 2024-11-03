@@ -30,8 +30,7 @@ class VerifyResponse(BaseModel):
     is_valid: bool
 
 
-@router.post("/ecdsa/generate_key",
-             response_model=GenerateKeyResponse)
+@router.post("/ecdsa/generate_key", response_model=GenerateKeyResponse)
 async def ecdsa_generateKey(seed: ecdsa.Seed):
     privateKey, publicKey = ecdsa.generateKey(seed.curve_name)
     return {
@@ -42,9 +41,7 @@ async def ecdsa_generateKey(seed: ecdsa.Seed):
 
 @router.post("/ecdsa/sign", response_model=SignResponse)
 async def ecdsa_sign(req: SignRequest) -> SignResponse:
-    return SignResponse(
-        signature=ecdsa.sign(req.privateKey, req.message)
-    )
+    return SignResponse(signature=ecdsa.sign(req.privateKey, req.message))
 
 
 @router.post("/ecdsa/verify", response_model=VerifyResponse)

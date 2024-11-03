@@ -29,14 +29,10 @@ class VerifyResponse(BaseModel):
     is_valid: bool
 
 
-@router.post("/rsa/generate_key",
-             response_model=GenerateKeyResponse)
+@router.post("/rsa/generate_key", response_model=GenerateKeyResponse)
 async def rsa_generate_key(seed: rsa.Seed):
     private_key, public_key = rsa.generateKey(seed)
-    return {
-        "privateKey": private_key,
-        "publicKey": public_key
-    }
+    return {"privateKey": private_key, "publicKey": public_key}
 
 
 @router.post("/rsa/sign", response_model=SignRespone)

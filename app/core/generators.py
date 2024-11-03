@@ -70,8 +70,11 @@ def generateProbablePrime(length: int) -> int:
 
 def generatePrimeUseAPI(length: int) -> int:
     if length not in [2048, 4096, 8192]:
-        raise Exception(
-            "GenreatePrimeUseAPI only support length is 2048, 4096 or 8192")
+        raise Exception("GenreatePrimeUseAPI only support length is 2048, 4096 or 8192")
     api_url = f"https://2ton.com.au/getprimes/random/{length}"
     response = requests.get(api_url)
     return int(response.json()["p"]["base10"])
+
+
+def randomIntInRange(a: int, b: int) -> int:
+    return a + secrets.randbelow(b)

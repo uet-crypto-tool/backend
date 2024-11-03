@@ -24,7 +24,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xE95E4A5F737059DC60DF5991D45029409E60FC09,
         h=0x1,
-        name="brainpoolP160r1"
+        name="brainpoolP160r1",
     )
 
     brainpoolP192r1 = Curve(
@@ -37,7 +37,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xC302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1,
         h=0x1,
-        name="brainpoolP192r1"
+        name="brainpoolP192r1",
     )
 
     brainpoolP224r1 = Curve(
@@ -50,7 +50,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xD7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F,
         h=0x1,
-        name="brainpoolP224r1"
+        name="brainpoolP224r1",
     )
     brainpoolP256r1 = Curve(
         p=0xA9FB57DBA1EEA9BC3E660A909D838D726E3BF623D52620282013481D1F6E5377,
@@ -62,7 +62,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xA9FB57DBA1EEA9BC3E660A909D838D718C397AA3B561A6F7901E0E82974856A7,
         h=0x1,
-        name="brainpoolP256r1"
+        name="brainpoolP256r1",
     )
 
     brainpoolP320r1 = Curve(
@@ -75,7 +75,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xD35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311,
         h=0x1,
-        name="brainpoolP320r1"
+        name="brainpoolP320r1",
     )
     brainpoolP384r1 = Curve(
         p=0x8CB91E82A3386D280F5D6F7E50E641DF152F7109ED5456B412B1DA197FB71123ACD3A729901D1A71874700133107EC53,
@@ -87,7 +87,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0x8CB91E82A3386D280F5D6F7E50E641DF152F7109ED5456B31F166E6CAC0425A7CF3AB6AF6B7FC3103B883202E9046565,
         h=0x1,
-        name="brainpoolP384r1"
+        name="brainpoolP384r1",
     )
     brainpoolP512r1 = Curve(
         p=0xAADD9DB8DBE9C48B3FD4E6AE33C9FC07CB308DB3B3C9D20ED6639CCA703308717D4D9B009BC66842AECDA12AE6A380E62881FF2F2D82C68528AA6056583A48F3,
@@ -99,7 +99,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xAADD9DB8DBE9C48B3FD4E6AE33C9FC07CB308DB3B3C9D20ED6639CCA70330870553E5C414CA92619418661197FAC10471DB1D381085DDADDB58796829CA90069,
         h=0x1,
-        name="brainpoolP512r1"
+        name="brainpoolP512r1",
     )
 
     secp192r1 = Curve(
@@ -112,7 +112,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xFFFFFFFFFFFFFFFFFFFFFFFF99DEF836146BC9B1B4D22831,
         h=0x1,
-        name="secp192r1"
+        name="secp192r1",
     )
 
     secp224r1 = Curve(
@@ -125,7 +125,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFF16A2E0B8F03E13DD29455C5C2A3D,
         h=0x1,
-        name="secp224r1"
+        name="secp224r1",
     )
 
     secp256r1 = Curve(
@@ -138,7 +138,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551,
         h=0x1,
-        name="secp256r1"
+        name="secp256r1",
     )
 
     secp256k1 = Curve(
@@ -151,7 +151,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141,
         h=0x1,
-        name="secp256k1"
+        name="secp256k1",
     )
 
     secp384r1 = Curve(
@@ -164,7 +164,7 @@ class CurveDomainParamter(Enum):
         ),
         n=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973,
         h=0x1,
-        name="secp384r1"
+        name="secp384r1",
     )
 
     secp521r1 = Curve(
@@ -177,5 +177,5 @@ class CurveDomainParamter(Enum):
         ),
         n=0x000001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA51868783BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409,
         h=0x1,
-        name="secp521r1"
+        name="secp521r1",
     )

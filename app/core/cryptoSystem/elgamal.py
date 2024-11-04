@@ -1,6 +1,6 @@
 from app.core.utils import powermod, mul_mod, randomRelativePrime
 from app.core.generators import randomIntInRange
-from app.schemas.elgamal_schemas import Seed, PublicKey, PrivateKey, EncryptedMessage
+from app.schemas.elgamal import Seed, PublicKey, PrivateKey, EncryptedMessage
 from typing import Tuple
 
 

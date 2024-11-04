@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.signatureScheme import ecdsa
-from app.schemas.ecdsa_schemas import (
+from app.schemas.ecdsa import (
     GenerateKeyResponse,
     SignRequest,
     SignResponse,

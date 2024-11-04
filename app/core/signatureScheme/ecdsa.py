@@ -2,7 +2,7 @@ from app.core.ellipticCurve.domain import CurveDomainParamter
 from app.core.ellipticCurve.point import Point
 from app.core.utils import inverse_mod, mul_mod
 from app.core.generators import randomIntInRange
-from app.schemas.ecdsa_schemas import Seed, PrivateKey, PublicKey, Signature
+from app.schemas.ecdsa import Seed, PrivateKey, PublicKey, Signature
 
 
 def generateKey(curve_name: str):

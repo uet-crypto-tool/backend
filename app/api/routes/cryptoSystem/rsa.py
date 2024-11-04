@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.cryptoSystem import rsa
-from app.schemas.rsa_schemas import (
+from app.schemas.rsa import (
     GenerateKeyResponse,
     EncryptRequest,
     EncryptResponse,

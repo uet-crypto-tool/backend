@@ -1,5 +1,5 @@
 from app.core.utils import inverse_mod, powermod, randomRelativePrime
-from app.schemas.rsa_schemas import Seed, PublicKey, PrivateKey, EncryptedMessage
+from app.schemas.rsa import Seed, PublicKey, PrivateKey, EncryptedMessage
 from typing import Tuple
 
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.signatureScheme import rsa
-from app.schemas.rsa_schemas import (
+from app.schemas.rsa import (
     GenerateKeyResponse,
     SignRequest,
     SignRespone,

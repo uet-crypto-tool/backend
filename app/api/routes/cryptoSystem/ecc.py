@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.cryptoSystem import ecc
-from app.schemas.ecc_schemas import (
+from app.schemas.ecc import (
     Seed,
     GenerateKeyResponse,
     EncryptRequest,

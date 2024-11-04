@@ -1,6 +1,6 @@
 from app.core.utils import inverse_mod, powermod, mul_mod, randomRelativePrime
 from typing import Tuple
-from app.schemas.elgamal_schemas import Seed, PrivateKey, PublicKey, Signature
+from app.schemas.elgamal import Seed, PrivateKey, PublicKey, Signature
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:

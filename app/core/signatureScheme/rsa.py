@@ -1,6 +1,6 @@
 from app.core.utils import inverse_mod, powermod, randomRelativePrime
 from typing import Tuple
-from app.schemas.rsa_schemas import Seed, PublicKey, PrivateKey, Signature
+from app.schemas.rsa import Seed, PublicKey, PrivateKey, Signature
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:

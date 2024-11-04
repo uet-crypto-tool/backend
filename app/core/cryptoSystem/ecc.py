@@ -5,7 +5,7 @@ from functools import partial
 from app.core.ellipticCurve.point import Point, PointType
 from app.core.ellipticCurve.domain import CurveDomainParamter
 from app.core.ellipticCurve import Koblitz
-from app.schemas.ecc_schemas import Seed, PrivateKey, PublicKey, EncryptedMessage
+from app.schemas.ecc import Seed, PrivateKey, PublicKey, EncryptedMessage
 
 
 def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.signatureScheme import elgamal
-from app.schemas.elgamal_schemas import (
+from app.schemas.elgamal import (
     GenerateKeyResponse,
     SignRequest,
     SignResponse,

@@ -13,21 +13,20 @@ def test_pipeline(test_client: TestClient):
     assert response.status_code == 200
     key = response.json()
 
-    message = secrets.randbits(8)
+    message = str(secrets.randbits(8))
     response = test_client.post(
         "/signature_scheme/ecdsa/sign",
         json={"privateKey": key["privateKey"], "message": message},
     )
     assert response.status_code == 200
     res = response.json()
-    signature = res["signature"]
 
     response = test_client.post(
         "/signature_scheme/ecdsa/verify",
         json={
             "publicKey": key["publicKey"],
             "message": message,
-            "signature": signature,
+            "signature": res["signature"],
         },
     )
     assert response.status_code == 200

@@ -1,8 +1,12 @@
 from fastapi import APIRouter
 from app.core.signatureScheme import elgamal
 from app.schemas.elgamal import (
+    Seed,
+    PrivateKey,
+    PublicKey,
     GenerateKeyResponse,
     SignRequest,
+    Signature,
     SignResponse,
     VerifyRequest,
     VerifyResponse,
@@ -12,11 +16,11 @@ router = APIRouter()
 
 
 @router.post("/elgamal/generate_key", response_model=GenerateKeyResponse)
-async def elgamal_generateKey(seed: elgamal.Seed):
-    privateKey, publicKey = elgamal.generateKey(seed)
+async def elgamal_generate_key(seed: Seed):
+    p, a, alpha, beta = elgamal.generateKey(int(seed.p), int(seed.a))
     return GenerateKeyResponse(
-        privateKey=privateKey,
-        publicKey=publicKey,
+        privateKey=PrivateKey(p=str(p), a=str(a), alpha=str(alpha)),
+        publicKey=PublicKey(p=str(p), alpha=str(alpha), beta=str(beta)),
     )
 
 
@@ -24,13 +28,25 @@ async def elgamal_generateKey(seed: elgamal.Seed):
 async def elgamal_sign(
     req: SignRequest,
 ) -> SignResponse:
-    return SignResponse(signature=elgamal.sign(req.privateKey, req.message))
+    y1, y2 = elgamal.sign(
+        int(req.privateKey.p),
+        int(req.privateKey.a),
+        int(req.privateKey.alpha),
+        int(req.message),
+    )
+    signature = Signature(y1=str(y1), y2=str(y2))
+    return SignResponse(signature=signature)
 
 
 @router.post("/elgamal/verify", response_model=VerifyResponse)
 async def elgamal_verify(
     req: VerifyRequest,
 ) -> VerifyResponse:
-    return VerifyResponse(
-        is_valid=elgamal.verify(req.publicKey, req.message, req.signature)
+    is_valid = elgamal.verify(
+        int(req.publicKey.p),
+        int(req.publicKey.alpha),
+        int(req.publicKey.beta),
+        int(req.message),
+        (int(req.signature.y1), int(req.signature.y2)),
     )
+    return VerifyResponse(is_valid=is_valid)

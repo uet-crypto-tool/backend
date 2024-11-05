@@ -110,7 +110,7 @@ class Point(object):
         return self.__str__()
 
     def type(self):
-        return PointType(x=self.x, y=self.y)
+        return PointType(x=str(self.x), y=str(self.y))
 
 
 class Inf(object):

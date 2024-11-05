@@ -3,20 +3,20 @@ from typing import Tuple
 
 
 class Seed(BaseModel):
-    p: int
-    a: int
+    p: str
+    a: str
 
 
 class PrivateKey(BaseModel):
-    p: int
-    a: int
-    alpha: int
+    p: str
+    a: str
+    alpha: str
 
 
 class PublicKey(BaseModel):
-    p: int
-    alpha: int
-    beta: int
+    p: str
+    alpha: str
+    beta: str
 
 
 class GenerateKeyResponse(BaseModel):
@@ -25,13 +25,13 @@ class GenerateKeyResponse(BaseModel):
 
 
 class EncryptedMessage(BaseModel):
-    y1: int
-    y2: int
+    y1: str
+    y2: str
 
 
 class EncryptRequest(BaseModel):
     publicKey: PublicKey
-    message: int
+    message: str
 
 
 class EncryptResponse(BaseModel):
@@ -44,17 +44,17 @@ class DecryptRequest(BaseModel):
 
 
 class DecryptResponse(BaseModel):
-    decrypted_message: int
+    decrypted_message: str
 
 
 class Signature(BaseModel):
-    y1: int
-    y2: int
+    y1: str
+    y2: str
 
 
 class SignRequest(BaseModel):
     privateKey: PrivateKey
-    message: int
+    message: str
 
 
 class SignResponse(BaseModel):
@@ -63,7 +63,7 @@ class SignResponse(BaseModel):
 
 class VerifyRequest(BaseModel):
     publicKey: PublicKey
-    message: int
+    message: str
     signature: Signature
 
 

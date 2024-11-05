@@ -2,18 +2,18 @@ from pydantic import BaseModel
 
 
 class Seed(BaseModel):
-    p: int
-    q: int
+    p: str
+    q: str
 
 
 class PublicKey(BaseModel):
-    n: int
-    e: int
+    n: str
+    e: str
 
 
 class PrivateKey(BaseModel):
-    n: int
-    d: int
+    n: str
+    d: str
 
 
 class GenerateKeyResponse(BaseModel):
@@ -22,12 +22,12 @@ class GenerateKeyResponse(BaseModel):
 
 
 class EncryptedMessage(BaseModel):
-    value: int
+    value: str
 
 
 class EncryptRequest(BaseModel):
     publicKey: PublicKey
-    message: int
+    message: str
 
 
 class EncryptResponse(BaseModel):
@@ -40,16 +40,16 @@ class DecryptRequest(BaseModel):
 
 
 class DecryptResponse(BaseModel):
-    decrypted_message: int
+    decrypted_message: str
 
 
 class Signature(BaseModel):
-    value: int
+    value: str
 
 
 class SignRequest(BaseModel):
     privateKey: PrivateKey
-    message: int
+    message: str
 
 
 class SignRespone(BaseModel):
@@ -58,7 +58,7 @@ class SignRespone(BaseModel):
 
 class VerifyRequest(BaseModel):
     publicKey: PublicKey
-    message: int
+    message: str
     signature: Signature
 
 

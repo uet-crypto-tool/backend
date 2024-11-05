@@ -9,7 +9,7 @@ class Seed(BaseModel):
 
 class PrivateKey(BaseModel):
     curve_name: str
-    secret_number: int
+    secret_number: str
 
 
 class PublicKey(BaseModel):

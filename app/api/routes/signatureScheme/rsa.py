@@ -1,29 +1,44 @@
 from fastapi import APIRouter
 from app.core.signatureScheme import rsa
 from app.schemas.rsa import (
+    Seed,
     GenerateKeyResponse,
     SignRequest,
     SignRespone,
     VerifyRequest,
     VerifyResponse,
+    Signature,
+    PrivateKey,
+    PublicKey,
 )
 
 router = APIRouter()
 
 
 @router.post("/rsa/generate_key", response_model=GenerateKeyResponse)
-async def rsa_generate_key(seed: rsa.Seed):
-    private_key, public_key = rsa.generateKey(seed)
-    return GenerateKeyResponse(privateKey=private_key, publicKey=public_key)
+async def rsa_generate_key(seed: Seed):
+    n, d, e = rsa.generateKey(int(seed.p), int(seed.q))
+    privateKey = PrivateKey(n=str(n), d=str(d))
+    publicKey = PublicKey(n=str(n), e=str(e))
+    return GenerateKeyResponse(privateKey=privateKey, publicKey=publicKey)
 
 
 @router.post("/rsa/sign", response_model=SignRespone)
 async def rsa_sign(req: SignRequest) -> SignRespone:
-    return SignRespone(signature=rsa.sign(req.privateKey, req.message))
+    signature = Signature(
+        value=str(
+            rsa.sign(int(req.privateKey.n), int(req.privateKey.d), int(req.message))
+        )
+    )
+    return SignRespone(signature=signature)
 
 
 @router.post("/rsa/verify", response_model=VerifyResponse)
 async def rsa_verify(req: VerifyRequest) -> VerifyResponse:
-    return VerifyResponse(
-        is_valid=rsa.verify(req.publicKey, req.message, req.signature)
+    is_valid = rsa.verify(
+        int(req.publicKey.n),
+        int(req.publicKey.e),
+        int(req.message),
+        int(req.signature.value),
     )
+    return VerifyResponse(is_valid=is_valid)

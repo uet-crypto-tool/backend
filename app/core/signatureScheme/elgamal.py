@@ -3,34 +3,35 @@ from typing import Tuple
 from app.schemas.elgamal import Seed, PrivateKey, PublicKey, Signature
 
 
-def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
-    p, a = seed.p, seed.a
+def generateKey(p: int, a: int) -> Tuple[int, int, int, int]:
     alpha = randomRelativePrime(p)
     beta = powermod(alpha, a, p)
-    return (PrivateKey(p=p, a=a, alpha=alpha), PublicKey(p=p, alpha=alpha, beta=beta))
+    return p, a, alpha, beta
 
 
 def H(message: int) -> int:
     return message
 
 
-def sign(privateKey: PrivateKey, message: int) -> Signature:
-    k = randomRelativePrime(privateKey.p - 1)
-    y1 = powermod(privateKey.alpha, k, privateKey.p)
+def sign(p: int, a: int, alpha: int, message: int) -> Tuple[int, int]:
+    k = randomRelativePrime(p - 1)
+    y1 = powermod(alpha, k, p)
 
-    ay1_mod = mul_mod(privateKey.a, y1, privateKey.p - 1)
-    h_minus_ay1_mod = (H(message) - ay1_mod) % (privateKey.p - 1)
-    k_inv = inverse_mod(k, privateKey.p - 1)
-    y2 = mul_mod(h_minus_ay1_mod, k_inv, privateKey.p - 1)
-    return Signature(y1=y1, y2=y2)
+    ay1_mod = mul_mod(a, y1, p - 1)
+    h_minus_ay1_mod = (H(message) - ay1_mod) % (p - 1)
+    k_inv = inverse_mod(k, p - 1)
+    y2 = mul_mod(h_minus_ay1_mod, k_inv, p - 1)
+    return y1, y2
 
 
-def verify(publicKey: PublicKey, message: int, signature: Signature) -> bool:
-    y1, y2 = signature.y1, signature.y2
+def verify(
+    p: int, alpha: int, beta: int, message: int, signature: Tuple[int, int]
+) -> bool:
+    y1, y2 = signature
     v1 = mul_mod(
-        powermod(publicKey.beta, y1, publicKey.p),
-        powermod(y1, y2, publicKey.p),
-        publicKey.p,
+        powermod(beta, y1, p),
+        powermod(y1, y2, p),
+        p,
     )
-    v2 = powermod(publicKey.alpha, H(message), publicKey.p)
+    v2 = powermod(alpha, H(message), p)
     return v1 == v2

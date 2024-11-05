@@ -12,23 +12,25 @@ def test_pipeline(test_client: TestClient):
     q = response.json()
 
     response = test_client.post(
-        "/crypto_system/rsa/generate_key", json={"p": p, "q": q}
+        "/crypto_system/rsa/generate_key", json={"p": str(p), "q": str(q)}
     )
     assert response.status_code == 200
     key = response.json()
 
-    message = secrets.randbits(8)
+    message = str(secrets.randbits(8))
     response = test_client.post(
         "/crypto_system/rsa/encrypt",
         json={"publicKey": key["publicKey"], "message": message},
     )
     assert response.status_code == 200
     res = response.json()
-    encrypted_message = res["encrypted_message"]
 
     response = test_client.post(
         "/crypto_system/rsa/decrypt",
-        json={"privateKey": key["privateKey"], "encrypted_message": encrypted_message},
+        json={
+            "privateKey": key["privateKey"],
+            "encrypted_message": res["encrypted_message"],
+        },
     )
     assert response.status_code == 200
     res = response.json()

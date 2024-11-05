@@ -1,24 +1,22 @@
 from app.core.utils import inverse_mod, powermod, randomRelativePrime
 from typing import Tuple
-from app.schemas.rsa import Seed, PublicKey, PrivateKey, Signature
 
 
-def generateKey(seed: Seed) -> Tuple[PrivateKey, PublicKey]:
-    p, q = seed.p, seed.q
+def generateKey(p: int, q: int) -> Tuple[int, int, int]:
     n = p * q
     phi_n = (p - 1) * (q - 1)
     e = randomRelativePrime(phi_n)
     d = inverse_mod(e, phi_n)
-    return (PrivateKey(n=n, d=e), PublicKey(n=n, e=d))
+    return n, d, e
 
 
 def H(m: int) -> int:
     return m
 
 
-def sign(privateKey: PrivateKey, message: int) -> Signature:
-    return Signature(value=powermod(H(message), privateKey.d, privateKey.n))
+def sign(n: int, d: int, message: int) -> int:
+    return powermod(H(message), d, n)
 
 
-def verify(publicKey: PublicKey, message: int, signature: Signature) -> bool:
-    return H(message) == powermod(signature.value, publicKey.e, publicKey.n)
+def verify(n: int, e: int, message: int, signature: int) -> bool:
+    return H(message) == powermod(signature, e, n)

@@ -5,6 +5,7 @@ from app.core.ellipticCurve.point import PointType
 
 class Seed(BaseModel):
     curve_name: str
+    secret_number: str
 
 
 class PrivateKey(BaseModel):

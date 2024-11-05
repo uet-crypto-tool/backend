@@ -8,9 +8,8 @@ from app.core.ellipticCurve import Koblitz
 from app.core.ellipticCurve.curve import Curve
 
 
-def generateKey(curve_name: str) -> Tuple[str, int, Point]:
+def generateKey(curve_name: str, secret_number: int) -> Tuple[str, int, Point]:
     curve = CurveDomainParamter.get(curve_name)
-    secret_number = secrets.randbits(1024)
     B = secret_number * curve.g
     return curve_name, secret_number, B
 

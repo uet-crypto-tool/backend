@@ -19,7 +19,9 @@ router = APIRouter()
 
 @router.post("/ecc/generate_key", response_model=GenerateKeyResponse)
 async def ecc_generate_key(seed: Seed):
-    curve_name, secret_number, B = ecc.generateKey(seed.curve_name)
+    curve_name, secret_number, B = ecc.generateKey(
+        seed.curve_name, int(seed.secret_number)
+    )
     return GenerateKeyResponse(
         privateKey=PrivateKey(curve_name=curve_name, secret_number=str(secret_number)),
         publicKey=PublicKey(curve_name=curve_name, B=B.type()),

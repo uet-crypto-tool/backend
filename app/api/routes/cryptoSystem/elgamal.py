@@ -41,8 +41,8 @@ async def elgamal_decrypt(
     req: DecryptRequest,
 ) -> DecryptResponse:
     decrypted_message = elgamal.decrypt(
-        int(req.privateKey.a),
         int(req.privateKey.p),
+        int(req.privateKey.a),
         (int(req.encrypted_message.y1), int(req.encrypted_message.y2)),
     )
     return DecryptResponse(decrypted_message=str(decrypted_message))

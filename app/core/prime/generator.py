@@ -1,7 +1,7 @@
-import requests
-import threading
 import secrets
-from app.core.primality import millerRabin
+import threading
+import requests
+from app.core.prime.primality import isPrime
 
 
 def genNum(length, lock):
@@ -14,7 +14,7 @@ def genNum(length, lock):
         #  count += 1
         # finally:
         #  lock.release()
-        if millerRabin(x):
+        if isPrime(x):
             lock.acquire()
             try:
                 possibleNum = x
@@ -63,7 +63,7 @@ def generateProbablePrime(length: int) -> int:
     if x % 2 == 0:
         x += 1
     while True:
-        if millerRabin(x):
+        if isPrime(x):
             return x
         x += 2
 
@@ -74,7 +74,3 @@ def generatePrimeUseAPI(length: int) -> int:
     api_url = f"https://2ton.com.au/getprimes/random/{length}"
     response = requests.get(api_url)
     return int(response.json()["p"]["base10"])
-
-
-def randomIntInRange(lower: int, upper: int) -> int:
-    return lower + secrets.randbelow(upper - lower + 1)

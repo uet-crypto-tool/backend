@@ -1,7 +1,6 @@
 from app.core.ellipticCurve.domain import CurveDomainParamter
 from app.core.ellipticCurve.point import Point
-from app.core.utils import inverse_mod, mul_mod
-from app.core.generators import randomIntInRange
+from app.core.utils import inverse_mod, mul_mod, randomIntInRange
 from typing import Tuple
 
 

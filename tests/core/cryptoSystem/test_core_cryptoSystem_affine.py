@@ -4,7 +4,6 @@ import secrets
 
 def test_pipeline():
     message = "HelloWorld"
-    shift = secrets.randbits(100)
     a = randomRelativePrime(26)
     b = secrets.randbits(100)
     encrypted_message = affine.encrypt(a, b, message)

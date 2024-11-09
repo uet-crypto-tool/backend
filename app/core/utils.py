@@ -1,5 +1,16 @@
 from typing import Tuple
-from app.core.generators import randomIntInRange
+import secrets
+
+
+def fastPower(a: int, e: int, n: int) -> int:
+    """
+    Computes the exponentiation of a^e mod n by successive squaring\n
+    Inputs:
+      integers a, e, n
+    Output:
+      integer aPow
+    """
+    return pow(a, e, n)
 
 
 def egcd(a, b) -> Tuple[int, int, int]:
@@ -60,3 +71,7 @@ def decodeString(message_decimal: int, alphabet_size: int = 2**8) -> str:
         message_decimal //= alphabet_size
 
     return "".join(characters)
+
+
+def randomIntInRange(lower: int, upper: int) -> int:
+    return lower + secrets.randbelow(upper - lower + 1)

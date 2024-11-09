@@ -1,5 +1,5 @@
 from app.core.signatureScheme import rsa
-from app.core.generators import generateProbablePrime
+from app.core.prime.generator import generateProbablePrime
 import secrets
 
 

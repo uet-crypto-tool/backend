@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.core import primality
-from app.core import generators
+from app.core.prime.primality import isPrime
+from app.core.prime.generator import generateProbablePrime
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -16,9 +16,9 @@ class GeneratePrimeRequest(BaseModel):
 
 @router.post("/check")
 async def check_prime(req: CheckPrimeRequest):
-    return {"isPrime": primality.isPrime(req.number)}
+    return {"isPrime": isPrime(req.number)}
 
 
 @router.post("/generate")
 async def generate_prime_has_bit_length(req: GeneratePrimeRequest) -> int:
-    return generators.generateProbablePrime(req.bitLength)
+    return generateProbablePrime(req.bitLength)

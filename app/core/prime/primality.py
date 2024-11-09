@@ -5,25 +5,6 @@ from app.core.prime.smallPrimes import smallPrimes
 from app.core.prime.millerRabin import millerRabin
 
 
-def genNum(length, lock):
-    global possibleNum
-    # global count
-    while not possibleNum:
-        x = secrets.randbits(length)
-        # lock.acquire()
-        # try:
-        #  count += 1
-        # finally:
-        #  lock.release()
-        if millerRabin(x):
-            lock.acquire()
-            try:
-                possibleNum = x
-            finally:
-                lock.release()
-    # print(str(threading.get_ident()) + ' closing, count=' + str(count))
-
-
 def isPrime(n: int) -> bool:
     """
     Determines probabalistically if a number is prime\n

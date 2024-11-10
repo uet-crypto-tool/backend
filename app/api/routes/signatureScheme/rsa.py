@@ -27,7 +27,7 @@ async def rsa_generate_key(seed: Seed):
 async def rsa_sign(req: SignRequest) -> SignRespone:
     signature = Signature(
         value=str(
-            rsa.sign(int(req.privateKey.n), int(req.privateKey.d), int(req.message))
+            rsa.sign(int(req.privateKey.n), int(req.privateKey.d), req.message)
         )
     )
     return SignRespone(signature=signature)
@@ -38,7 +38,7 @@ async def rsa_verify(req: VerifyRequest) -> VerifyResponse:
     is_valid = rsa.verify(
         int(req.publicKey.n),
         int(req.publicKey.e),
-        int(req.message),
+        req.message,
         int(req.signature.value),
     )
     return VerifyResponse(is_valid=is_valid)

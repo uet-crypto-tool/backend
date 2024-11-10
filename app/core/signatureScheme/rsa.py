@@ -1,5 +1,6 @@
 from app.core.utils import inverse_mod, powermod, randomRelativePrime
 from typing import Tuple
+import hashlib
 
 
 def generateKey(p: int, q: int) -> Tuple[int, int, int]:
@@ -10,13 +11,15 @@ def generateKey(p: int, q: int) -> Tuple[int, int, int]:
     return n, d, e
 
 
-def H(m: int) -> int:
-    return m
+def H(message: str, n: int) -> int:
+    return int(hashlib.sha512(message.encode()).hexdigest(), 16) % n
 
 
-def sign(n: int, d: int, message: int) -> int:
-    return powermod(H(message), d, n)
+def sign(n: int, d: int, message: str) -> int:
+    hashed_message = H(message, n)
+    return powermod(hashed_message, d, n)
 
 
-def verify(n: int, e: int, message: int, signature: int) -> bool:
-    return H(message) == powermod(signature, e, n)
+def verify(n: int, e: int, message: str, signature: int) -> bool:
+    hash_message = H(message, n)
+    return  hash_message == powermod(signature, e, n)

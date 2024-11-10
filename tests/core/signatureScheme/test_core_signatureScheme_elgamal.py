@@ -8,7 +8,7 @@ def test_core_signatureSheme_rsa():
     a = secrets.randbits(100)
 
     p, a, alpha, beta = elgamal.generateKey(p, a)
-    message = secrets.randbits(8)
+    message = "HelloWorld"
     signature = elgamal.sign(p, a, alpha, message)
     is_valid = elgamal.verify(p, alpha, beta, message, signature)
     assert is_valid == True

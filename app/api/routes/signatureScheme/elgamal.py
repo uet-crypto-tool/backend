@@ -32,7 +32,7 @@ async def elgamal_sign(
         int(req.privateKey.p),
         int(req.privateKey.a),
         int(req.privateKey.alpha),
-        int(req.message),
+        req.message,
     )
     signature = Signature(y1=str(y1), y2=str(y2))
     return SignResponse(signature=signature)
@@ -46,7 +46,7 @@ async def elgamal_verify(
         int(req.publicKey.p),
         int(req.publicKey.alpha),
         int(req.publicKey.beta),
-        int(req.message),
+        req.message,
         (int(req.signature.y1), int(req.signature.y2)),
     )
     return VerifyResponse(is_valid=is_valid)

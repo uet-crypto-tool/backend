@@ -29,7 +29,7 @@ class Signature(BaseModel):
 
 class SignRequest(BaseModel):
     privateKey: PrivateKey
-    message: int
+    message: str
 
 
 class SignResponse(BaseModel):
@@ -38,7 +38,7 @@ class SignResponse(BaseModel):
 
 class VerifyRequest(BaseModel):
     publicKey: PublicKey
-    message: int
+    message: str
     signature: Signature
 
 

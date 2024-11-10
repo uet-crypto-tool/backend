@@ -29,7 +29,7 @@ async def ecdsa_generateKey(seed: Seed):
 @router.post("/ecdsa/sign", response_model=SignResponse)
 async def ecdsa_sign(req: SignRequest) -> SignResponse:
     r, s = ecdsa.sign(
-        req.privateKey.curve_name, int(req.privateKey.d), int(req.message)
+        req.privateKey.curve_name, int(req.privateKey.d), req.message
     )
     return SignResponse(signature=Signature(r=str(r), s=str(s)))
 
@@ -40,7 +40,7 @@ async def ecdsa_verify(req: VerifyRequest) -> VerifyResponse:
     is_valid = ecdsa.verify(
         req.publicKey.curve_name,
         Point(curve, req.publicKey.Q.x, req.publicKey.Q.y),
-        int(req.message),
+        req.message,
         (int(req.signature.r), int(req.signature.s)),
     )
     return VerifyResponse(is_valid=is_valid)

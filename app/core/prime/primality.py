@@ -2,7 +2,7 @@ from __future__ import annotations
 from math import log10
 import secrets
 from app.core.prime.smallPrimes import smallPrimes
-from app.core.prime.millerRabin import millerRabin
+from app.core.prime import millerRabin
 
 
 def isPrime(n: int) -> bool:
@@ -25,4 +25,4 @@ def isPrime(n: int) -> bool:
         else:
             return False
     else:
-        return millerRabin(n)
+        return millerRabin.isPrime(n)

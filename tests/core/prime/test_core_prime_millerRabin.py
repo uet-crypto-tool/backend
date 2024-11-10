@@ -1,4 +1,4 @@
-from app.core.prime.millerRabin import millerRabin
+from app.core.prime.millerRabin import isPrime
 import random
 
 def test_prime_numbers():
@@ -8,7 +8,7 @@ def test_prime_numbers():
         31, 37, 41, 43, 47, 53, 59, 61, 67, 71
     ]
     for prime in primes:
-        assert millerRabin(prime) is True, f"{prime} should be prime"
+        assert isPrime(prime) is True, f"{prime} should be prime"
 
 def test_composite_numbers():
     """ Test that composite numbers are correctly identified. """
@@ -17,4 +17,4 @@ def test_composite_numbers():
         27, 28, 30, 35, 39, 40, 44, 45, 49, 50
     ]
     for composite in composites:
-        assert millerRabin(composite) is False, f"{composite} should be composite"
+        assert isPrime(composite) is False, f"{composite} should be composite"

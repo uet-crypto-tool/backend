@@ -4,7 +4,7 @@ from app.core.utils import fastPower
 from app.core.prime.smallPrimes import smallPrimes
 
 
-def millerRabin(n: int, warnings: bool = False) -> bool:
+def isPrime(n: int, warnings: bool = False) -> bool:
     """
     Performs the Miller-Rabin Test on possible prime n\n
     Input:

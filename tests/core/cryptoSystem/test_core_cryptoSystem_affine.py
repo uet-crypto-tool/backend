@@ -1,6 +1,7 @@
 from app.core.cryptoSystem import affine
-from app.core.utils import randomRelativePrime
+from app.core.prime.generator import randomRelativePrime
 import secrets
+
 
 def test_pipeline():
     message = "HelloWorld"

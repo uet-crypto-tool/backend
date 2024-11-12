@@ -1,6 +1,5 @@
 from __future__ import annotations
 from math import log10
-import secrets
 from app.core.prime.smallPrimes import smallPrimes
 from app.core.prime import millerRabin
 

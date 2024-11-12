@@ -2,6 +2,7 @@ import secrets
 import threading
 import requests
 from app.core.prime.primality import isPrime
+from app.core.utils import gcd, randomIntInRange
 
 
 def genNum(length, lock):
@@ -74,3 +75,10 @@ def generatePrimeUseAPI(length: int) -> int:
     api_url = f"https://2ton.com.au/getprimes/random/{length}"
     response = requests.get(api_url)
     return int(response.json()["p"]["base10"])
+
+
+def randomRelativePrime(p: int) -> int:
+    k = randomIntInRange(2, p - 2)
+    while gcd(k, p) != 1:
+        k = randomIntInRange(2, p - 2)
+    return k

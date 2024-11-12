@@ -1,4 +1,5 @@
-from app.core.utils import inverse_mod, powermod, randomRelativePrime
+from app.core.utils import inverse_mod, powermod
+from app.core.prime.generator import randomRelativePrime
 from typing import Tuple
 import hashlib
 
@@ -22,4 +23,4 @@ def sign(n: int, d: int, message: str) -> int:
 
 def verify(n: int, e: int, message: str, signature: int) -> bool:
     hash_message = H(message, n)
-    return  hash_message == powermod(signature, e, n)
+    return hash_message == powermod(signature, e, n)

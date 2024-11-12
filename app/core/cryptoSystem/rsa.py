@@ -1,4 +1,5 @@
-from app.core.utils import inverse_mod, powermod, randomRelativePrime
+from app.core.utils import inverse_mod, powermod
+from app.core.prime.generator import randomRelativePrime
 from typing import Tuple
 
 

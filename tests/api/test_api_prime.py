@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 
-def test_isPrime(test_client: TestClient):
+def test_primality(test_client: TestClient):
     response = test_client.post("/prime/check", json={"number": 3})
     assert response.status_code == 200
     assert response.json() == {"isPrime": True}
@@ -10,9 +10,25 @@ def test_isPrime(test_client: TestClient):
     assert response.status_code == 200
     assert response.json() == {"isPrime": False}
 
+    response = test_client.post("/prime/aks/check", json={"number": 3})
+    assert response.status_code == 200
+    assert response.json() == {"isPrime": True}
 
-def test_generatePrime(test_client: TestClient):
-    response = test_client.post("/prime/generate", json={"bitLength": 8})
+    response = test_client.post("/prime/aks/check", json={"number": 4})
+    assert response.status_code == 200
+    assert response.json() == {"isPrime": False}
+
+    response = test_client.post("/prime/miller_rabbin/check", json={"number": 3})
+    assert response.status_code == 200
+    assert response.json() == {"isPrime": True}
+
+    response = test_client.post("/prime/miller_rabbin/check", json={"number": 6})
+    assert response.status_code == 200
+    assert response.json() == {"isPrime": False}
+
+
+def test_generator_prime(test_client: TestClient):
+    response = test_client.post("/prime/generate", json={"bit_length": 8})
     assert response.status_code == 200
     prime = response.json()
 

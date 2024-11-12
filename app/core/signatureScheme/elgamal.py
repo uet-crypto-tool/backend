@@ -1,6 +1,6 @@
-from app.core.utils import inverse_mod, powermod, mul_mod, randomRelativePrime
+from app.core.utils import inverse_mod, powermod, mul_mod
+from app.core.prime.generator import randomRelativePrime
 from typing import Tuple
-from app.schemas.elgamal import Seed, PrivateKey, PublicKey, Signature
 import hashlib
 
 

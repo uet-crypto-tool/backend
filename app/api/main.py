@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.api.routes import prime
 from app.api.routes.cryptoSystem.main import router as cryptoSytemRouter
 from app.api.routes.signatureScheme.main import router as signatureSchemeRouter
 from app.api.routes.ellipticeCurve.main import router as ellipticCurveRouter
+from app.api.routes.prime.main import router as primeRouter
 
 router = APIRouter()
 
@@ -13,7 +13,7 @@ def health_checker():
 
 
 router.include_router(
-    prime.router,
+    primeRouter,
     prefix="/prime",
     tags=["Prime"],
 )

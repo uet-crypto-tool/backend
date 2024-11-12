@@ -5,10 +5,28 @@ from enum import Enum
 class CurveDomainParamter(Enum):
     @classmethod
     def list(cls) -> list:
+        """
+        Returns a list of curve names defined in the enum class.
+
+        Returns:
+            list: List of curve names as strings.
+        """
         return list(map(lambda curve: curve.name, cls))
 
     @classmethod
     def get(cls, curve_name) -> Curve:
+        """
+        Retrieves the corresponding elliptic curve object for a given curve name.
+
+        Args:
+            curve_name (str): The name of the elliptic curve.
+
+        Returns:
+            Curve: The corresponding elliptic curve object.
+
+        Raises:
+            ValueError: If the curve name is not found in the enum.
+        """
         try:
             return CurveDomainParamter[curve_name].value
         except KeyError:

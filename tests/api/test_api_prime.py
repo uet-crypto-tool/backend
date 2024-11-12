@@ -10,6 +10,8 @@ def test_primality(test_client: TestClient):
     assert response.status_code == 200
     assert response.json() == {"isPrime": False}
 
+
+def test_aks(test_client: TestClient):
     response = test_client.post("/prime/aks/check", json={"number": 3})
     assert response.status_code == 200
     assert response.json() == {"isPrime": True}
@@ -18,6 +20,8 @@ def test_primality(test_client: TestClient):
     assert response.status_code == 200
     assert response.json() == {"isPrime": False}
 
+
+def test_miller_rabin(test_client: TestClient):
     response = test_client.post("/prime/miller_rabbin/check", json={"number": 3})
     assert response.status_code == 200
     assert response.json() == {"isPrime": True}

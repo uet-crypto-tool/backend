@@ -3,7 +3,7 @@ import secrets
 
 
 def test_pipeline(test_client: TestClient):
-    response = test_client.post("/prime/generate", json={"bit_length": 8})
+    response = test_client.post("/prime/generate", json={"bit_length": 100})
     assert response.status_code == 200
     p = response.json()
     a = secrets.randbits(8)

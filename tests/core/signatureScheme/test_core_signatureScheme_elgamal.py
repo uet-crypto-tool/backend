@@ -5,7 +5,7 @@ import secrets
 
 def test_core_signatureSheme_rsa():
     p = generateProbablePrime(100)
-    a = secrets.randbits(100)
+    a = secrets.randbits(90)
 
     p, a, alpha, beta = elgamal.generateKey(p, a)
     message = "HelloWorld"

@@ -1,8 +1,12 @@
 from fastapi import APIRouter
-from . import rsa, elgamal, ecc
+from app.api.routes.cryptoSystem.symmetric.main import router as SymmetricRouter
+from app.api.routes.cryptoSystem.asymmetric.main import router as AsymmetricRouter
 
 router = APIRouter()
 
-router.include_router(rsa.router)
-router.include_router(elgamal.router)
-router.include_router(ecc.router)
+router.include_router(
+    SymmetricRouter, prefix="/symmetric", tags=["Symmetric CryptoSystem"]
+)
+router.include_router(
+    AsymmetricRouter, prefix="/asymmetric", tags=["Asymmetric CryptoSystem"]
+)

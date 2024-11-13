@@ -21,7 +21,6 @@ router.include_router(
 router.include_router(
     cryptoSytemRouter,
     prefix="/crypto_system",
-    tags=["Crypto System"],
 )
 
 router.include_router(

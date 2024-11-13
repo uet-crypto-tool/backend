@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.core.cryptoSystem import rsa
+from app.core.cryptoSystem.asymmetric import rsa
 from app.schemas.rsa import (
     Seed,
     GenerateKeyResponse,

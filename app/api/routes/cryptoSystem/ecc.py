@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.core.cryptoSystem import ecc
+from app.core.cryptoSystem.asymmetric import ecc
 from app.core.ellipticCurve.domain import CurveDomainParamter
 from app.core.ellipticCurve.point import Point
 from app.schemas.ecc import (

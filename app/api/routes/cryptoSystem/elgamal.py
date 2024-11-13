@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.core.cryptoSystem import elgamal
+from app.core.cryptoSystem.asymmetric import elgamal
 from app.schemas.elgamal import (
     Seed,
     PrivateKey,

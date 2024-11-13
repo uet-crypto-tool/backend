@@ -1,4 +1,4 @@
-from app.core.cryptoSystem import vigenere
+from app.core.cryptoSystem.symmetric import vigenere
 
 
 def test_pipeline():

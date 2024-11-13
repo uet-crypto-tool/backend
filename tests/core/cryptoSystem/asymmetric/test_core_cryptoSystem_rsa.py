@@ -1,4 +1,4 @@
-from app.core.cryptoSystem import rsa
+from app.core.cryptoSystem.asymmetric import rsa
 from app.core.prime.generator import generateProbablePrime
 import secrets
 

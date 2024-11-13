@@ -1,4 +1,4 @@
-from app.core.cryptoSystem import shiftcipher
+from app.core.cryptoSystem.symmetric import shiftcipher
 import secrets
 
 

@@ -1,4 +1,4 @@
-from app.core.cryptoSystem import elgamal
+from app.core.cryptoSystem.asymmetric import elgamal
 from app.core.prime.generator import generateProbablePrime
 import secrets
 

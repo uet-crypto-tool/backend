@@ -1,4 +1,4 @@
-from app.core.cryptoSystem import ecc
+from app.core.cryptoSystem.asymmetric import ecc
 import secrets
 import random
 from app.core.ellipticCurve.domain import CurveDomainParamter

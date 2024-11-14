@@ -9,7 +9,8 @@ def test_pipeline(test_client: TestClient):
     a = secrets.randbits(8)
 
     response = test_client.post(
-        "/crypto_system/elgamal/generate_key", json={"p": str(p), "a": str(a)}
+        "/crypto_system/asymmetric/elgamal/generate_key",
+        json={"p": str(p), "a": str(a)},
     )
     assert response.status_code == 200
     key = response.json()
@@ -17,14 +18,14 @@ def test_pipeline(test_client: TestClient):
 
     message = str(secrets.randbits(8))
     response = test_client.post(
-        "/crypto_system/elgamal/encrypt",
+        "/crypto_system/asymmetric/elgamal/encrypt",
         json={"publicKey": key["publicKey"], "message": message},
     )
     assert response.status_code == 200
     res = response.json()
 
     response = test_client.post(
-        "/crypto_system/elgamal/decrypt",
+        "/crypto_system/asymmetric/elgamal/decrypt",
         json={
             "privateKey": key["privateKey"],
             "encrypted_message": res["encrypted_message"],

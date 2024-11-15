@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from . import shift, affine, vigenere
+from . import shiftcipher, affine, vigenere
 
 router = APIRouter()
 
-router.include_router(shift.router)
+router.include_router(shiftcipher.router)
 router.include_router(affine.router)
 router.include_router(vigenere.router)

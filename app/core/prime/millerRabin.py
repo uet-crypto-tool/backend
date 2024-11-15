@@ -1,7 +1,4 @@
 from __future__ import annotations
-from math import log10, log, floor
-from app.core.utils import fastPower
-from app.core.prime.smallPrimes import smallPrimes
 import random
 
 

@@ -17,7 +17,11 @@ from app.schemas.ecdsa import (
 router = APIRouter()
 
 
-@router.post("/ecdsa/generate_key", response_model=GenerateKeyResponse)
+@router.post(
+    "/ecdsa/generate_key",
+    response_model=GenerateKeyResponse,
+    summary="Generates ECDSA key pairs (private and public keys) using the provided curve name.",
+)
 async def ecdsa_generateKey(seed: Seed):
     curve_name, d, Q = ecdsa.generateKey(seed.curve_name)
     return GenerateKeyResponse(
@@ -26,15 +30,21 @@ async def ecdsa_generateKey(seed: Seed):
     )
 
 
-@router.post("/ecdsa/sign", response_model=SignResponse)
+@router.post(
+    "/ecdsa/sign",
+    response_model=SignResponse,
+    summary="Signs a message using the provided private key.",
+)
 async def ecdsa_sign(req: SignRequest) -> SignResponse:
-    r, s = ecdsa.sign(
-        req.privateKey.curve_name, int(req.privateKey.d), req.message
-    )
+    r, s = ecdsa.sign(req.privateKey.curve_name, int(req.privateKey.d), req.message)
     return SignResponse(signature=Signature(r=str(r), s=str(s)))
 
 
-@router.post("/ecdsa/verify", response_model=VerifyResponse)
+@router.post(
+    "/ecdsa/verify",
+    response_model=VerifyResponse,
+    summary="Verifies if a given signature is valid for a message using the provided public key.",
+)
 async def ecdsa_verify(req: VerifyRequest) -> VerifyResponse:
     curve = CurveDomainParamter.get(req.publicKey.curve_name)
     is_valid = ecdsa.verify(

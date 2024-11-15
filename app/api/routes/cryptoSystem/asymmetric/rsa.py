@@ -15,7 +15,11 @@ from app.schemas.rsa import (
 router = APIRouter()
 
 
-@router.post("/rsa/generate_key", response_model=GenerateKeyResponse)
+@router.post(
+    "/rsa/generate_key",
+    response_model=GenerateKeyResponse,
+    summary="Generate RSA public and private keys",
+)
 async def rsa_generate_key(seed: Seed):
     n, d, e = rsa.generateKey(int(seed.p), int(seed.q))
     privateKey = PrivateKey(n=str(n), d=str(d))
@@ -23,7 +27,11 @@ async def rsa_generate_key(seed: Seed):
     return GenerateKeyResponse(privateKey=privateKey, publicKey=publicKey)
 
 
-@router.post("/rsa/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/rsa/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using RSA public key",
+)
 async def rsa_encrypt(req: EncryptRequest) -> EncryptResponse:
     encrypted_message = EncryptedMessage(
         value=str(
@@ -33,7 +41,11 @@ async def rsa_encrypt(req: EncryptRequest) -> EncryptResponse:
     return EncryptResponse(encrypted_message=encrypted_message)
 
 
-@router.post("/rsa/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/rsa/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt an encrypted message using RSA private key",
+)
 async def rsa_decrypt(req: DecryptRequest) -> DecryptResponse:
     decrypted_message = rsa.decrypt(
         int(req.privateKey.n), int(req.privateKey.d), int(req.encrypted_message.value)

@@ -23,11 +23,21 @@ class DecryptResponse(BaseModel):
     decrypted_message: str
 
 
-@router.post("/vigenere/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/vigenere/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using Vigenère cipher",
+)
 async def encrypt(req: EncryptRequest):
     return EncryptResponse(encrypted_message=vigenere.encrypt(req.key, req.message))
 
 
-@router.post("/vigenere/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/vigenere/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt an encrypted message using Vigenère cipher",
+)
 async def decrypt(req: DecryptRequest):
-    return DecryptRequest(decrypted_message=vigenere.decrypted(req.key, req.message))
+    return DecryptResponse(
+        decrypted_message=vigenere.decrypt(req.key, req.encrypted_message)
+    )

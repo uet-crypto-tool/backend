@@ -15,7 +15,11 @@ from app.schemas.elgamal import (
 router = APIRouter()
 
 
-@router.post("/elgamal/generate_key", response_model=GenerateKeyResponse)
+@router.post(
+    "/elgamal/generate_key",
+    response_model=GenerateKeyResponse,
+    summary="Generates ElGamal key pairs (private and public keys) using the provided seed values.",
+)
 async def elgamal_generate_key(seed: Seed):
     p, a, alpha, beta = elgamal.generateKey(int(seed.p), int(seed.a))
     return GenerateKeyResponse(
@@ -24,7 +28,11 @@ async def elgamal_generate_key(seed: Seed):
     )
 
 
-@router.post("/elgamal/sign", response_model=SignResponse)
+@router.post(
+    "/elgamal/sign",
+    response_model=SignResponse,
+    summary="Signs a message using the provided private key.",
+)
 async def elgamal_sign(
     req: SignRequest,
 ) -> SignResponse:
@@ -38,7 +46,11 @@ async def elgamal_sign(
     return SignResponse(signature=signature)
 
 
-@router.post("/elgamal/verify", response_model=VerifyResponse)
+@router.post(
+    "/elgamal/verify",
+    response_model=VerifyResponse,
+    summary="Verifies if a given signature is valid for a message using the provided public key.",
+)
 async def elgamal_verify(
     req: VerifyRequest,
 ) -> VerifyResponse:

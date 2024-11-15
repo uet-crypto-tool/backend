@@ -23,11 +23,21 @@ class DecryptResponse(BaseModel):
     decrypted_message: str
 
 
-@router.post("/shiftcipher/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/shiftcipher/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using shift cipher",
+)
 async def encrypt(req: EncryptRequest):
     return EncryptResponse(encrypted_message=shiftcipher.encrypt(req.key, req.message))
 
 
-@router.post("/shiftcipher/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/shiftcipher/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt an encrypted message using shift cipher",
+)
 async def decrypt(req: DecryptRequest):
-    return DecryptRequest(decrypted_message=shiftcipher.decrypted(req.key, req.message))
+    return DecryptResponse(
+        decrypted_message=shiftcipher.decrypt(req.key, req.encrypted_message)
+    )

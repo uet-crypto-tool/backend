@@ -28,11 +28,23 @@ class DecryptResponse(BaseModel):
     decrypted_message: str
 
 
-@router.post("/affine/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/affine/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using the Affine cipher",
+)
 async def encrypt(req: EncryptRequest):
-    return EncryptResponse(encrypted_message=affine.encrypt(req.key.a, req.key.b, req.message))
+    return EncryptResponse(
+        encrypted_message=affine.encrypt(req.key.a, req.key.b, req.message)
+    )
 
 
-@router.post("/affine/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/affine/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt a message using the Affine cipher",
+)
 async def decrypt(req: DecryptRequest):
-    return DecryptRequest(decrypted_message=affine.decrypted(req.key.a, req.key.b, req.message))
+    return DecryptResponse(
+        decrypted_message=affine.decrypted(req.key.a, req.key.b, req.message)
+    )

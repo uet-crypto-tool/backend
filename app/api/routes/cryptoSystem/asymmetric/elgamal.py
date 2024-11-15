@@ -15,7 +15,11 @@ from app.schemas.elgamal import (
 router = APIRouter()
 
 
-@router.post("/elgamal/generate_key", response_model=GenerateKeyResponse)
+@router.post(
+    "/elgamal/generate_key",
+    response_model=GenerateKeyResponse,
+    summary="Generate ElGamal public and private keys",
+)
 async def elgamal_generate_key(seed: Seed):
     p, a, alpha, beta = elgamal.generateKey(int(seed.p), int(seed.a))
     privateKey = PrivateKey(p=str(p), a=str(a), alpha=str(alpha))
@@ -23,7 +27,11 @@ async def elgamal_generate_key(seed: Seed):
     return GenerateKeyResponse(privateKey=privateKey, publicKey=publicKey)
 
 
-@router.post("/elgamal/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/elgamal/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using ElGamal public key",
+)
 async def elgamal_encrypt(
     req: EncryptRequest,
 ) -> EncryptResponse:
@@ -36,7 +44,11 @@ async def elgamal_encrypt(
     return EncryptResponse(encrypted_message=EncryptedMessage(y1=str(y1), y2=str(y2)))
 
 
-@router.post("/elgamal/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/elgamal/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt an encrypted message using ElGamal private key",
+)
 async def elgamal_decrypt(
     req: DecryptRequest,
 ) -> DecryptResponse:

@@ -17,7 +17,11 @@ from app.schemas.ecc import (
 router = APIRouter()
 
 
-@router.post("/ecc/generate_key", response_model=GenerateKeyResponse)
+@router.post(
+    "/ecc/generate_key",
+    response_model=GenerateKeyResponse,
+    summary="Generate an ECC key pair",
+)
 async def ecc_generate_key(seed: Seed):
     curve_name, secret_number, B = ecc.generateKey(
         seed.curve_name, int(seed.secret_number)
@@ -28,7 +32,11 @@ async def ecc_generate_key(seed: Seed):
     )
 
 
-@router.post("/ecc/encrypt", response_model=EncryptResponse)
+@router.post(
+    "/ecc/encrypt",
+    response_model=EncryptResponse,
+    summary="Encrypt a message using ECC public key",
+)
 async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
     curve = CurveDomainParamter.get(
         req.publicKey.curve_name,
@@ -44,7 +52,11 @@ async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
     )
 
 
-@router.post("/ecc/decrypt", response_model=DecryptResponse)
+@router.post(
+    "/ecc/decrypt",
+    response_model=DecryptResponse,
+    summary="Decrypt a message using ECC private key",
+)
 async def ecc_decrypt(req: DecryptRequest) -> DecryptResponse:
     curve = CurveDomainParamter.get(req.privateKey.curve_name)
     pair_points = [

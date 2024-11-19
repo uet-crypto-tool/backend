@@ -21,4 +21,4 @@ async def generate_prime_has_bit_length(req: GeneratePrimeRequest):
     summary="Generate a random number that is relatively prime to the specified integer",
 )
 async def generate_relative_prime(p: int):
-    return {"relative_prime": randomRelativePrime(p)}
+    return {"relative_prime": str(randomRelativePrime(p))}

@@ -12,13 +12,13 @@ class GeneratePrimeRequest(BaseModel):
 @router.post(
     "/generate", summary="Generate a probable prime number with specified bit length"
 )
-async def generate_prime_has_bit_length(req: GeneratePrimeRequest) -> int:
-    return generateProbablePrime(req.bit_length)
+async def generate_prime_has_bit_length(req: GeneratePrimeRequest):
+    return {"prime": str(generateProbablePrime(req.bit_length))}
 
 
 @router.post(
     "/generate_relative_prime",
     summary="Generate a random number that is relatively prime to the specified integer",
 )
-async def generate_relative_prime(p: int) -> int:
-    return randomRelativePrime(p)
+async def generate_relative_prime(p: int):
+    return {"relative_prime": randomRelativePrime(p)}

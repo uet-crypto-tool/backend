@@ -49,7 +49,7 @@ async def ecdsa_verify(req: VerifyRequest) -> VerifyResponse:
     curve = CurveDomainParamter.get(req.publicKey.curve_name)
     is_valid = ecdsa.verify(
         req.publicKey.curve_name,
-        Point(curve, req.publicKey.Q.x, req.publicKey.Q.y),
+        Point(curve, int(req.publicKey.Q.x), int(req.publicKey.Q.y)),
         req.message,
         (int(req.signature.r), int(req.signature.s)),
     )

@@ -73,7 +73,7 @@ class Curve:
         """
         return (y**2 - x**3 - self.a * x - self.b) % self.p == 0
 
-    def __eq__(self, other: Union[Curve, object]) -> bool:
+    def __eq__(self, other: Curve) -> bool:
         """
         Compares two curves for equality.
 
@@ -83,8 +83,6 @@ class Curve:
         Returns:
             bool: True if the curves are equal, False otherwise.
         """
-        if not isinstance(other, Curve):
-            return False
         return (
             self.p == other.p
             and self.a == other.a
@@ -92,18 +90,6 @@ class Curve:
             and self.n == other.n
             and self.h == other.h
         )
-
-    def __ne__(self, other: Union[Curve, object]) -> bool:
-        """
-        Compares two curves for inequality.
-
-        Args:
-            other (Curve): Another curve to compare.
-
-        Returns:
-            bool: True if the curves are not equal, False otherwise.
-        """
-        return not self.__eq__(other)
 
     def __str__(self) -> str:
         """

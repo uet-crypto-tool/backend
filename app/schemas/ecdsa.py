@@ -14,7 +14,7 @@ class PublicKey(BaseModel):
 
 class PrivateKey(BaseModel):
     curve_name: str
-    d: int
+    d: str
 
 
 class GenerateKeyResponse(BaseModel):
@@ -23,8 +23,8 @@ class GenerateKeyResponse(BaseModel):
 
 
 class Signature(BaseModel):
-    r: int
-    s: int
+    r: str
+    s: str
 
 
 class SignRequest(BaseModel):

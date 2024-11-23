@@ -13,8 +13,8 @@ class PointType(BaseModel):
     Represents a point on the elliptic curve, used for serialization.
     """
 
-    x: int
-    y: int
+    x: str
+    y: str
 
 
 class Point:

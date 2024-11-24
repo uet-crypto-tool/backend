@@ -3,7 +3,7 @@
 ```sh
 git clone https://github.com/uet-crypto-tool/backend &&
 cd backend &&
-pip install -r requirements.txt &&
+poetry install
 ```
 ## Run
 ```sh

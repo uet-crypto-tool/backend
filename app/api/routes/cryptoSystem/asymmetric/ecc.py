@@ -43,7 +43,7 @@ async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
     )
     encrypted_pairs = ecc.encrypt(
         req.publicKey.curve_name,
-        Point(curve, req.publicKey.B.x, req.publicKey.B.y),
+        Point(curve, int(req.publicKey.B.x), int(req.publicKey.B.y)),
         req.message,
     )
     encrypted_pairs = [(pair[0].type(), pair[1].type()) for pair in encrypted_pairs]

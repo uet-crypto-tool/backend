@@ -60,7 +60,7 @@ async def ecc_encrypt(req: EncryptRequest) -> EncryptResponse:
 async def ecc_decrypt(req: DecryptRequest) -> DecryptResponse:
     curve = CurveDomainParamter.get(req.privateKey.curve_name)
     pair_points = [
-        (Point(curve, pair[0].x, pair[0].y), Point(curve, pair[1].x, pair[1].y))
+        (Point(curve, int(pair[0].x), int(pair[0].y)), Point(curve, int(pair[1].x), int(pair[1].y)))
         for pair in req.encrypted_message.pair_points
     ]
     decrypted_message = ecc.decrypt(
